@@ -1,28 +1,54 @@
 package br.com.panacademy.bluebank.model;
 
 import javax.persistence.*;
+import java.util.Collection;
+
+
 
 @Entity
-@Table(name = "tb_cliente")
+@Table(name = "cliente", uniqueConstraints = @UniqueConstraint(columnNames = "cpf"))
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nome")
     private String nome;
+
+    @Column(name = "sobrenome")
     private String sobrenome;
-    private String telefone;
-    private String cpf;
+
     private String email;
     private String senha;
+    private String cpf;
 
-    @OneToOne
-    @JoinColumn(name = "conta_id", referencedColumnName = "id")
-    private Conta conta;
+    @ManyToMany(fetch = FetchType.EAGER, cascade =  CascadeType.ALL)
+    @JoinTable(
+            name = "funcoes_cliente",
+            joinColumns = @JoinColumn(
+                    name = "cliente_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "funcao_id", referencedColumnName = "id"))
+
+    private Collection<Funcao> funcoes;
+
+
+
+
+    public Cliente(String nome, String sobrenome, String email, String senha, String cpf, Collection<Funcao> funcoes) {
+        super();
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.email = email;
+        this.senha = senha;
+        this.cpf = cpf;
+        this.funcoes = funcoes;
+    }
 
     public Cliente() {
     }
+
 
     public Long getId() {
         return id;
@@ -44,24 +70,8 @@ public class Cliente {
         return sobrenome;
     }
 
-    public void setSobrenome(String sobrenome) {
+    public void setSobreNome(String sobrenome) {
         this.sobrenome = sobrenome;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -80,11 +90,19 @@ public class Cliente {
         this.senha = senha;
     }
 
-    public Conta getConta() {
-        return conta;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public Collection<Funcao> getFuncoes() {
+        return funcoes;
+    }
+
+    public void setFuncoes(Collection<Funcao> funcoes) {
+        this.funcoes = funcoes;
     }
 }
