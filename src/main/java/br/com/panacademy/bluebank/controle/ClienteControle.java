@@ -1,7 +1,7 @@
-package br.com.panacademy.bluebank.controller;
+package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.model.Cliente;
-import br.com.panacademy.bluebank.repository.ClienteRepository;
+import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,11 +10,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cliente")
-public class ClienteController {
+public class ClienteControle {
 
-    private final ClienteRepository repository;
+    private final ClienteRepositorio repository;
 
-    public ClienteController(ClienteRepository repository) {
+    public ClienteControle(ClienteRepositorio repository) {
         this.repository = repository;
     }
 

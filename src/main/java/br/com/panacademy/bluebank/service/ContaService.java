@@ -1,7 +1,5 @@
 package br.com.panacademy.bluebank.service;
 
-import br.com.panacademy.bluebank.model.Conta;
-
 public class ContaService {
 
 //    Conta conta = new Conta();
