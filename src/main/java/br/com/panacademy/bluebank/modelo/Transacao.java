@@ -6,15 +6,20 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "tb_transacao")
 public class Transacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String tipoTransacao;
+
     @Column
     @CreationTimestamp
     private LocalDateTime dataTransacao;
+
+    private String descricao;
 
     private Double valor;
 
@@ -27,10 +32,28 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao (Long id, LocalDateTime dataTransacao, Double valor) {
+    public Transacao (Long id, String tipo, String descricao, LocalDateTime dataTransacao, Double valor) {
         this.id = id;
+        this.tipoTransacao = tipoTransacao;
+        this.descricao = descricao;
         this.dataTransacao = dataTransacao;
         this.valor = valor;
+    }
+
+    public String getTipoTransacao() {
+        return tipoTransacao;
+    }
+
+    public void setTipoTransacao(String tipoTransacao) {
+        this.tipoTransacao = tipoTransacao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Long getId() {

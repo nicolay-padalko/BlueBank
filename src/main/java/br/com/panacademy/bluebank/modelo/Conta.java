@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.modelo;
 
 import com.sun.istack.NotNull;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
