@@ -1,8 +1,9 @@
-package br.com.panacademy.bluebank.service;
+package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.model.Conta;
+import org.springframework.stereotype.Service;
 
-public class ContaService {
+@Service
+public class ContaServico {
 
 //    Conta conta = new Conta();
 //    //para transferir informa o valor e o numero da conta destino

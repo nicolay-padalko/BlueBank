@@ -1,4 +1,4 @@
-package br.com.panacademy.bluebank.model;
+package br.com.panacademy.bluebank.modelo;
 
 import javax.persistence.*;
 
