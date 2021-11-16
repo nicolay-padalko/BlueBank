@@ -1,6 +1,14 @@
 package br.com.panacademy.bluebank.modelo;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -15,10 +23,12 @@ public class Cliente {
     private String telefone;
     private String cpf;
     private String email;
+
+    @JsonIgnore
     private String senha;
 
     @OneToOne
-    @JoinColumn(name = "conta_id", referencedColumnName = "id")
+    @JoinColumn(name = "conta_id", referencedColumnName = "conta_id")
     private Conta conta;
 
     public Cliente() {
