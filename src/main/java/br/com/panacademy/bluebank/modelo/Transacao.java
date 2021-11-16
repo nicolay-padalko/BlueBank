@@ -1,5 +1,7 @@
 package br.com.panacademy.bluebank.modelo;
 
+import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,9 +15,10 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String tipoTransacao;
+    @Enumerated(EnumType.STRING)
+    private TipoTransacao tipoTransacao;
 
-    @Column
+    @Column(name = "data_transacao")
     @CreationTimestamp
     private LocalDateTime dataTransacao;
 
@@ -23,11 +26,10 @@ public class Transacao {
 
     private Double valor;
 
-    @ManyToOne(fetch = FetchType.LAZY) //Isso significa que ao realizarmos um “SELECT * from contaLazy” teremos todos os campos retornados, mas os campos com a propriedade FetchType.LAZY estarão nulos, mesmo que eles existam no banco. Essa é uma forma de não sobrecarregar sua aplicação com dados inúteis que não serão utilizados, tornando-a rápida e performática.
-    private Conta contaOrigem;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Conta contaDestino;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "conta_id")
+    private Conta conta;
 
     public Transacao() {
     }
@@ -40,11 +42,11 @@ public class Transacao {
         this.valor = valor;
     }
 
-    public String getTipoTransacao() {
+    public TipoTransacao getTipoTransacao() {
         return tipoTransacao;
     }
 
-    public void setTipoTransacao(String tipoTransacao) {
+    public void setTipoTransacao(TipoTransacao tipoTransacao) {
         this.tipoTransacao = tipoTransacao;
     }
 
@@ -80,22 +82,13 @@ public class Transacao {
         this.valor = valor;
     }
 
-    public Conta getContaOrigem() {
-        return contaOrigem;
+    public Conta getConta() {
+        return conta;
     }
 
-    public void setContaOrigem(Conta contaOrigem) {
-        this.contaOrigem = contaOrigem;
+    public void setConta(Conta conta) {
+        this.conta = conta;
     }
-
-    public Conta getContaDestino() {
-        return contaDestino;
-    }
-
-    public void setContaDestino(Conta contaDestino) {
-        this.contaDestino = contaDestino;
-    }
-
 }
 
 
