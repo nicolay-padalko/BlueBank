@@ -1,58 +1,44 @@
 package br.com.panacademy.bluebank.modelo;
 
 import com.sun.istack.NotNull;
-import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_conta")
 public class Conta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @NotNull
-    private Integer numeroConta;
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "gerador")
+    @SequenceGenerator(name="gerador", sequenceName="db_conta_gerador", initialValue = 50000, allocationSize = 10)
+    @Column(name = "conta_id")
+    private Long contaId;
 
     @NotNull
     private BigDecimal saldo;
 
+    @NotNull
+    @Column(name="criado_em")
+    @CreationTimestamp
+    private LocalDateTime criadoEm;
 
-    private Instant dataCriacao;
-
-//
-//    @OneToMany
-//    private List<Transacao> transacaoList;
-
-//    @OneToOne(mappedBy = "conta")
-//    private Long idCliente; //se o idCliente não for usado na classe cliente para identificar, alterar.
-
-   @PrePersist
-   public void prePersist(){
-       dataCriacao = Instant.now();
-   }
+    @OneToMany(mappedBy = "conta")
+    private List<Transacao> transacoes = new ArrayList<>();
 
     public Conta() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getContaId() {
+        return contaId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getNumeroConta() {
-        return numeroConta;
-    }
-
-    public void setNumeroConta(Integer numeroConta) {
-        this.numeroConta = numeroConta;
+    public void setContaId(Long contaId) {
+        this.contaId = contaId;
     }
 
     public BigDecimal getSaldo() {
@@ -63,11 +49,15 @@ public class Conta {
         this.saldo = saldo;
     }
 
-    public Instant getDataCriacao() {
-        return dataCriacao;
+    public LocalDateTime getCriadoEm() {
+        return criadoEm;
     }
 
-    public void setDataCriacao(Instant dataCriacao) {
-        this.dataCriacao = dataCriacao;
+    public void setCriadoEm(LocalDateTime dataCriacao) {
+        this.criadoEm = dataCriacao;
+    }
+
+    public List<Transacao> getTransacoes() {
+        return transacoes;
     }
 }
