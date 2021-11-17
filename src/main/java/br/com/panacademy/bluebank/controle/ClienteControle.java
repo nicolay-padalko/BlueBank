@@ -26,9 +26,9 @@ public class ClienteControle {
         return ResponseEntity.ok(listaClientesDTO);
     }
 
-    @DeleteMapping(value = "/delete") //mapear a url
-    @ResponseBody //descrição da resposta
-    public ResponseEntity<ClienteDTO> delete (@PathVariable Long Id) { //recebendo os dados para deletar
-      //  ClienteRepositorio<ClienteDTO> ("Cliente Deletado com sucesso", HttpStatus.OK);
+    @DeleteMapping(value = "/{id}") //mapear a url
+    public ResponseEntity<Void> deletar(@PathVariable Long id) { //recebendo os dados para deletar
+        clienteServico.deletarCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }
