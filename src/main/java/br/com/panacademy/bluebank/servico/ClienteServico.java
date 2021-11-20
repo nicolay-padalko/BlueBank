@@ -1,7 +1,7 @@
 package br.com.panacademy.bluebank.servico;
 
 import br.com.panacademy.bluebank.dto.ClienteDTO;
-import br.com.panacademy.bluebank.excecao.ExcecaoEntidadeNaoEncontradaException;
+import br.com.panacademy.bluebank.excecao.EntidadeNaoEncontradaException;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
@@ -43,13 +43,13 @@ public class ClienteServico {
 
         try {
             Optional<Cliente> obj = clienteRepositorio.findById(dto.getId());
-            Cliente entidade = obj.orElseThrow(() -> new ExcecaoEntidadeNaoEncontradaException("Cliente não encontrado"));
+            Cliente entidade = obj.orElseThrow(() -> new EntidadeNaoEncontradaException("Cliente não encontrado"));
             copiarDtoParaEntidade(dto, entidade);
             entidade = clienteRepositorio.save(entidade);
             return new ClienteDTO(entidade);
 
-        } catch (ExcecaoEntidadeNaoEncontradaException e) {
-            throw new ExcecaoEntidadeNaoEncontradaException("Cliente não encontrado: id " + id);
+        } catch (EntidadeNaoEncontradaException e) {
+            throw new EntidadeNaoEncontradaException("Cliente não encontrado: id " + id);
         }
     }
 
