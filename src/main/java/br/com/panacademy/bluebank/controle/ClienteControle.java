@@ -2,7 +2,6 @@ package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.dto.ClienteDTO;
 import br.com.panacademy.bluebank.servico.ClienteServico;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +27,11 @@ public class ClienteControle {
     public ResponseEntity<Void> deletar(@PathVariable Long id) { //recebendo os dados para deletar
         clienteServico.deletarCliente(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<ClienteDTO> update(@PathVariable String id, @RequestBody ClienteDTO dto) {
+        dto = clienteServico.editar(id, dto);
+        return ResponseEntity.ok().body(dto);
     }
 }
