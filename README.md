@@ -11,6 +11,15 @@ Todas estas requisições são realizadas diretamente ao backend construido em J
 * [**Java 11+**](https://jdk.java.net/15/)
 * [**Mysql 8+**](https://dev.mysql.com/downloads/)
 
+## Usando docker
+
+Você pode rodar o banco de dados usando docker pelo comando abaixo:
+```shell
+docker-compose up mysql
+# Ou
+sudo docker-compose up mysql
+```
+
 ## Equipe
 * René Bastos - rsbastos
 * Nicolay Padalko - nicolay-padalko

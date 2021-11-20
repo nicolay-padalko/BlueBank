@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.dto.ClienteDTO;
+import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,12 @@ public class ClienteControle {
     public ResponseEntity<List<ClienteDTO>> listarTodosClientes(){
         List<ClienteDTO> listaClientesDTO = clienteServico.listarTodos();
         return ResponseEntity.ok(listaClientesDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<Cliente> salvarCliente(Cliente cliente){
+        Cliente clienteSalvo = clienteServico.salvarCliente(cliente);
+        return ResponseEntity.ok(clienteSalvo);
     }
 
     @DeleteMapping(value = "/{id}") //mapear a url

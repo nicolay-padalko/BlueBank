@@ -3,6 +3,7 @@ package br.com.panacademy.bluebank.servico;
 import br.com.panacademy.bluebank.dto.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,6 +28,15 @@ public class ClienteServico {
     public List<ClienteDTO> listarTodos(){
         List<Cliente> listaClientes = clienteRepositorio.findAll();
         return listaClientes.stream().map(ClienteDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Cliente salvarCliente(Cliente cliente){
+        Conta conta = new Conta();
+        conta.setSaldo(0.0);
+        Conta contaSalva = contaRepositorio.save(conta);
+        cliente.setConta(contaSalva);
+        return clienteRepositorio.save(cliente);
     }
 
     public void deletarCliente(Long id) {
