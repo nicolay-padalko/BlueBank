@@ -1,7 +1,6 @@
 package br.com.panacademy.bluebank.servico;
 
 import br.com.panacademy.bluebank.dto.ClienteDTO;
-import br.com.panacademy.bluebank.excecao.EntidadeNaoEncontradaException;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,19 +37,21 @@ public class ClienteServico {
         }
     }
     @Transactional
-    public ClienteDTO editar (String id, ClienteDTO dto) {
-
+    public ClienteDTO editar (Long id, ClienteDTO dto) {
         try {
-            Optional<Cliente> obj = clienteRepositorio.findById(dto.getId());
-            Cliente entidade = obj.orElseThrow(() -> new EntidadeNaoEncontradaException("Cliente não encontrado"));
+            Cliente entidade = clienteRepositorio.findById(id)
+                    .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado"));
+
             copiarDtoParaEntidade(dto, entidade);
+
             entidade = clienteRepositorio.save(entidade);
             return new ClienteDTO(entidade);
 
-        } catch (EntidadeNaoEncontradaException e) {
-            throw new EntidadeNaoEncontradaException("Cliente não encontrado: id " + id);
+        } catch (RecursoNaoEncontradoException e) {
+            throw new RecursoNaoEncontradoException("Cliente não encontrado: id " + id);
         }
     }
+
 
     private void copiarDtoParaEntidade(ClienteDTO dto, Cliente entidade) {
         entidade.setNome(dto.getNome());

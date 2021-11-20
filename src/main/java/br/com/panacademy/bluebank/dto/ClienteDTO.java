@@ -13,12 +13,12 @@ public class ClienteDTO {
     private String cpf;
     private String email;
     private Long numeroConta;
-    private BigDecimal saldo;
+    private Double saldo;
 
     public ClienteDTO() {
     }
 
-    public ClienteDTO(Long id, String nome, String sobrenome, String telefone, String cpf, String email, Long numeroConta, BigDecimal saldo) {
+    public ClienteDTO(Long id, String nome, String sobrenome, String telefone, String cpf, String email, Long numeroConta, Double saldo) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
@@ -96,11 +96,11 @@ public class ClienteDTO {
         this.numeroConta = numeroConta;
     }
 
-    public BigDecimal getSaldo() {
+    public Double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(BigDecimal saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
 }

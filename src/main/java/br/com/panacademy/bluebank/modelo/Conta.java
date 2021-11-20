@@ -20,7 +20,7 @@ public class Conta {
     private Long contaId;
 
     @NotNull
-    private BigDecimal saldo;
+    private Double saldo;
 
     @NotNull
     @Column(name="criado_em")
@@ -41,11 +41,11 @@ public class Conta {
         this.contaId = contaId;
     }
 
-    public BigDecimal getSaldo() {
+    public Double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(BigDecimal saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
 

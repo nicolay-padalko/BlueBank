@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class ContaDTO {
 
     private Long contaId;
-    private BigDecimal saldo;
+    private Double saldo;
     private LocalDateTime criadoEm;
 
     public ContaDTO(Conta conta) {
@@ -25,11 +25,11 @@ public class ContaDTO {
         this.contaId = contaId;
     }
 
-    public BigDecimal getSaldo() {
+    public Double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(BigDecimal saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
 

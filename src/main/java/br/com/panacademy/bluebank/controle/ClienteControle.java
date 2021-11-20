@@ -29,8 +29,8 @@ public class ClienteControle {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/editar/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable String id, @RequestBody ClienteDTO dto) {
+    @PutMapping("{id}")
+    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO dto) {
         dto = clienteServico.editar(id, dto);
         return ResponseEntity.ok().body(dto);
     }

@@ -12,16 +12,16 @@ public class ContaServico {
     private ContaRepositorio contaRepositorio;
 
 
-//    //para sacar o valor tem que ser menor ou igual ao valor presente na conta, caso contrario a transação retorna false;
-//    public boolean saca(double valor) {
-//        var saldo = conta.getSaldo();
-//        if(saldo >= valor) {
-//            saldo -= valor;
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+    //para sacar o valor tem que ser menor ou igual ao valor presente na conta, caso contrario a transação retorna false;
+    public boolean saca(double valor) {
+        var saldo = conta.getSaldo();
+        if(saldo >= valor) {
+            saldo -= valor;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 //    //para depositar informa valor e soma ao total da conta.
 //    public void deposita(double valor) {
