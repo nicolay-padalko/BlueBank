@@ -6,6 +6,7 @@ import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
+import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,12 +39,17 @@ public class ClienteServico {
     }
 
     @Transactional
-    public Cliente salvarCliente(Cliente cliente){
+    public ClienteDTO salvarCliente(Cliente cliente){
         Conta conta = new Conta();
         conta.setSaldo(0.0);
         Conta contaSalva = contaRepositorio.save(conta);
+
+        ClienteDTO clienteDTO = new ClienteDTO();
+        BeanUtils.copyProperties(cliente, clienteDTO);
         cliente.setConta(contaSalva);
-        return clienteRepositorio.save(cliente);
+
+        clienteRepositorio.save(cliente);
+        return new ClienteDTO(cliente);
     }
 
     public void deletarCliente(Long id) {

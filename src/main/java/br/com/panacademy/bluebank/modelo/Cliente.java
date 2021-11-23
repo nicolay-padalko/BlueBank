@@ -24,7 +24,6 @@ public class Cliente {
     private String cpf;
     private String email;
 
-    @JsonIgnore
     private String senha;
 
     @OneToOne
