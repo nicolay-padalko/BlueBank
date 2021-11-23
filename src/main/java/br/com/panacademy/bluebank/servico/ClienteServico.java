@@ -30,6 +30,13 @@ public class ClienteServico {
         return listaClientes.stream().map(ClienteDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public ClienteDTO filtrarPorId(Long id) {
+            Cliente cliente = clienteRepositorio.findById(id)
+                    .orElseThrow(()->new RecursoNaoEncontradoException("Entidade não encontrada."));
+            return new ClienteDTO(cliente);
+    }
+
     @Transactional
     public Cliente salvarCliente(Cliente cliente){
         Conta conta = new Conta();

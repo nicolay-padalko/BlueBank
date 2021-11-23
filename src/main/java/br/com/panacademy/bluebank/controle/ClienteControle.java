@@ -6,6 +6,7 @@ import br.com.panacademy.bluebank.servico.ClienteServico;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @RestController
@@ -22,6 +23,12 @@ public class ClienteControle {
     public ResponseEntity<List<ClienteDTO>> listarTodosClientes(){
         List<ClienteDTO> listaClientesDTO = clienteServico.listarTodos();
         return ResponseEntity.ok(listaClientesDTO);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteDTO> filtrarPorId(@PathVariable Long id){
+        ClienteDTO clienteDTO = clienteServico.filtrarPorId(id);
+        return ResponseEntity.ok(clienteDTO);
     }
 
     @PostMapping
