@@ -84,6 +84,4 @@ public class ClienteServico {
         entidade.setEmail(dto.getEmail());
     }
 
-
-
 }
