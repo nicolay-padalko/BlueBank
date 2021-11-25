@@ -1,27 +1,61 @@
 package br.com.panacademy.bluebank.servico;
 
+import br.com.panacademy.bluebank.dto.ContaDTO;
+import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Conta;
-import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContaServico {
 
-    Conta conta = new Conta();
-    private ContaRepositorio contaRepositorio;
+    private final ContaRepositorio contaRepositorio;
 
+    public ContaServico(ContaRepositorio contaRepositorio) {
+        this.contaRepositorio = contaRepositorio;
+    }
 
-    //para sacar o valor tem que ser menor ou igual ao valor presente na conta, caso contrario a transação retorna false;
-    public boolean saca(double valor) {
-        var saldo = conta.getSaldo();
-        if(saldo >= valor) {
-            saldo -= valor;
-            return true;
-        } else {
-            return false;
+    @Transactional(readOnly = true)
+    public List<ContaDTO> listarTodas() {
+        List<Conta> listaContas = contaRepositorio.findAll();
+        return listaContas.stream().map(ContaDTO::new).collect(Collectors.toList());
+    }
+
+    public void deletarConta(Long id) {
+        try {
+            contaRepositorio.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new RecursoNaoEncontradoException("Recurso não encontrado " + id);
         }
     }
+
+}
+
+
+
+
+
+//    Conta conta = new Conta();
+//    private ContaRepositorio contaRepositorio;
+//
+//
+//
+//
+//    //para sacar o valor tem que ser menor ou igual ao valor presente na conta, caso contrario a transação retorna false;
+//    public boolean saca(double valor) {
+//        var saldo = conta.getSaldo();
+//        if(saldo >= valor) {
+//            saldo -= valor;
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
 //    //para depositar informa valor e soma ao total da conta.
 //    public void deposita(double valor) {
@@ -48,4 +82,4 @@ public class ContaServico {
 //        this.numeroConta = numero;
 //    }
 
-}
+
