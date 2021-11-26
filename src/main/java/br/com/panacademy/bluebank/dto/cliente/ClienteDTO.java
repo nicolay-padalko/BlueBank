@@ -1,8 +1,6 @@
-package br.com.panacademy.bluebank.dto;
+package br.com.panacademy.bluebank.dto.cliente;
 
 import br.com.panacademy.bluebank.modelo.Cliente;
-
-import java.math.BigDecimal;
 
 public class ClienteDTO {
 

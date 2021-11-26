@@ -1,8 +1,6 @@
 package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.dto.ClienteDTO;
 import br.com.panacademy.bluebank.dto.ContaDTO;
-import br.com.panacademy.bluebank.servico.ClienteServico;
 import br.com.panacademy.bluebank.servico.ContaServico;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

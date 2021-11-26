@@ -1,6 +1,8 @@
 package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.dto.ClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import org.springframework.http.ResponseEntity;
@@ -47,8 +49,15 @@ public class ClienteControle {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO dto) {
-        dto = clienteServico.editar(id, dto);
+    public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody AtualizarClienteDTO dto) {
+        dto = clienteServico.atualizarCliente(id, dto);
         return ResponseEntity.ok().body(dto);
     }
+
+    @PutMapping("/credenciais/{id}")
+    public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
+        dto = clienteServico.atualizarCredenciaisCliente(id, dto);
+        return ResponseEntity.ok().body(dto);
+    }
+
 }
