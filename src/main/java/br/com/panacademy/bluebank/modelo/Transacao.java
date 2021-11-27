@@ -34,7 +34,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao (Long id, String tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor) {
+    public Transacao (Long id, TipoTransacao tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor) {
         this.id = id;
         this.tipoTransacao = tipoTransacao;
         this.descricao = descricao;

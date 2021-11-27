@@ -1,17 +1,15 @@
 package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.dto.TransacaoDTO;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
+import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
+import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
 import br.com.panacademy.bluebank.modelo.Cliente;
-import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,4 +49,27 @@ public class TransacaoServico {
 
     }
 
+    @Transactional
+    public SacarDTO sacar(Long id, SacarDTO dto){
+        Cliente cliente = clienteRepositorio.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + id));
+
+        if(cliente.getConta().getSaldo() < dto.getValor()){
+            throw new SaldoInsuficienteException("O saldo de " + cliente.getNome() + " é insuficiente");
+        }
+        Double saldo = cliente.getConta().getSaldo() - dto.getValor();
+        cliente.getConta().setSaldo(saldo);
+
+        Transacao transacao = new Transacao();
+        transacao.setTipoTransacao(TipoTransacao.SAQUE);
+        transacao.setDescricao(dto.getDescricao());
+        transacao.setValor(dto.getValor());
+        transacao.setConta(cliente.getConta());
+
+        cliente.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
+
+        clienteRepositorio.save(cliente);
+
+        return new SacarDTO(transacao, saldo);
+    }
 }
