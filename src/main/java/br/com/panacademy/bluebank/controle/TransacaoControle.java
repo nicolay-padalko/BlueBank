@@ -1,9 +1,8 @@
 package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.dto.TransacaoDTO;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
+import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +16,15 @@ public class TransacaoControle {
         this.transacaoServico = transacaoServico;
     }
 
-    @PostMapping(value = "depositar/{id}")
-    public ResponseEntity<DepositarDTO> depositar(@PathVariable Long id, @RequestBody DepositarDTO dto){
+    @PostMapping(value = "depositar/{clienteId}")
+    public ResponseEntity<DepositarDTO> depositar(@PathVariable("clienteId") Long id, @RequestBody DepositarDTO dto){
         dto = transacaoServico.depositar(id, dto);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping(value = "sacar/{clienteId}")
+    public ResponseEntity<SacarDTO> sacar(@PathVariable("clienteId") Long id, @RequestBody SacarDTO dto){
+        dto = transacaoServico.sacar(id, dto);
         return ResponseEntity.ok(dto);
     }
 
