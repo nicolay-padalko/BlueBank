@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Transacao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -34,7 +34,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao (Long id, String tipo, String descricao, LocalDateTime dataTransacao, Double valor) {
+    public Transacao (Long id, String tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor) {
         this.id = id;
         this.tipoTransacao = tipoTransacao;
         this.descricao = descricao;
