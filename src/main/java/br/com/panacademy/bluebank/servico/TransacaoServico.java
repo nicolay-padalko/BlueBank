@@ -1,105 +1,109 @@
 package br.com.panacademy.bluebank.servico;
 
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
+import br.com.panacademy.bluebank.dto.transacao.OperacaoDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
 import br.com.panacademy.bluebank.modelo.Cliente;
-import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
-import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
-import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
 public class TransacaoServico {
 
     private final TransacaoRepositorio transacaoRepositorio;
-    private final ContaRepositorio contaRepositorio;
-    private final ClienteRepositorio clienteRepositorio;
+    private final ClienteServico clienteServico;
 
-    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ContaRepositorio contaRepositorio, ClienteRepositorio clienteRepositorio) {
+    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico) {
         this.transacaoRepositorio = transacaoRepositorio;
-        this.contaRepositorio = contaRepositorio;
-        this.clienteRepositorio = clienteRepositorio;
+        this.clienteServico = clienteServico;
     }
 
     @Transactional
-    public DepositarDTO depositar(Long id, DepositarDTO dto) {
-        Cliente cliente = clienteRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente nao encontrado: " + id));
-
-        Double valordeposito = dto.getValor() + cliente.getConta().getSaldo();
-        cliente.getConta().setSaldo(valordeposito);
-
-        Transacao transacao = new Transacao();
-        transacao.setTipoTransacao(TipoTransacao.DEPOSITO);
-        transacao.setDescricao(dto.getDescricao());
-        transacao.setValor(dto.getValor());
-        transacao.setConta(cliente.getConta());
-
-        cliente.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
-
-        clienteRepositorio.save(cliente);
-
-        return new DepositarDTO(transacao);
+    public DepositarDTO depositar(Long contaId, DepositarDTO depositar) {
+        Cliente cliente = clienteServico.filtrarClientePorContaId(contaId);
+        cliente.getConta().setSaldo(retornoSaldoDeposito(cliente, depositar));
+        List<Cliente> listaCliente = new ArrayList<>();
+        listaCliente.add(cliente);
+        return operacao(depositar, listaCliente, TipoTransacao.DEPOSITO);
 
     }
 
     @Transactional
-    public SacarDTO sacar(Long id, SacarDTO dto){
-        Cliente cliente = clienteRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + id));
-
-        if(cliente.getConta().getSaldo() < dto.getValor()){
-            throw new SaldoInsuficienteException("O saldo de " + cliente.getNome() + " é insuficiente");
-        }
-        Double saldo = cliente.getConta().getSaldo() - dto.getValor();
-        cliente.getConta().setSaldo(saldo);
-
-        Transacao transacao = new Transacao();
-        transacao.setTipoTransacao(TipoTransacao.SAQUE);
-        transacao.setDescricao(dto.getDescricao());
-        transacao.setValor(dto.getValor());
-        transacao.setConta(cliente.getConta());
-
-        cliente.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
-
-        clienteRepositorio.save(cliente);
-
-        return new SacarDTO(transacao, saldo);
+    public SacarDTO sacar(Long contaId, SacarDTO sacar){
+        Cliente cliente = clienteServico.filtrarClientePorContaId(contaId);
+        cliente.getConta().setSaldo(retornoSaldoSaque(cliente, sacar));
+        List<Cliente> listaCliente = new ArrayList<>();
+        listaCliente.add(cliente);
+        return operacao(sacar, listaCliente, TipoTransacao.SAQUE);
     }
 
+
     @Transactional
-    public TransferirDTO transferir(Long idOrigem, Long idDestino, TransferirDTO dto) {
-        Cliente clienteOrigem = clienteRepositorio.findById(idOrigem)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idOrigem));
+    public TransferirDTO transferir(Long idOrigem, Long idDestino, TransferirDTO transferir) {
+        Cliente clienteOrigem = clienteServico.filtrarClientePorContaId(idOrigem);
 
-        Cliente clienteDestino = clienteRepositorio.findById(idDestino)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idDestino));
+        Cliente clienteDestino =  clienteServico.filtrarClientePorContaId(idDestino);
 
-        Transacao transacao = new Transacao();
-        transacao.setTipoTransacao(TipoTransacao.TRANSFERENCIA);
-        transacao.setDescricao(dto.getDescricao());
-        transacao.setValor(dto.getValor());
-        transacao.setConta(clienteOrigem.getConta());
-        transacao.setIdContaDestino(clienteDestino.getConta().getContaId());
+        List<Cliente> lista = new ArrayList<>();
 
         try {
-            sacar(clienteOrigem.getId(), new SacarDTO(transacao));
-            depositar(clienteDestino.getId(), new DepositarDTO(transacao));
-            clienteOrigem.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
-            clienteDestino.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
+            clienteOrigem.getConta().setSaldo(retornoSaldoSaque(clienteOrigem, new SacarDTO(transferir)));
+            clienteDestino.getConta().setSaldo(retornoSaldoDeposito(clienteDestino, new DepositarDTO(transferir)));
+            lista.add(clienteOrigem);
+            lista.add(clienteDestino);
         } catch (RecursoNaoEncontradoException | SaldoInsuficienteException e){
             System.out.println("TESTANDO");
         }
 
-        return new TransferirDTO(transacao);
+        return operacao(transferir, lista, TipoTransacao.TRANSFERENCIA);
+    }
 
+    private <T extends OperacaoDTO> T operacao(T operacao, List<Cliente> cliente, TipoTransacao tipoTransacao){
+        Transacao transacao = new Transacao();
+        transacao.setTipoTransacao(tipoTransacao);
+        transacao.setDescricao(operacao.getDescricao());
+        transacao.setValor(operacao.getValor());
+        transacao.setConta(cliente.get(0).getConta());
+        if(cliente.size() == 2){
+            transacao.setIdContaDestino(cliente.get(1).getConta().getContaId());
+        }
+        operacao.setSaldo(cliente.get(0).getConta().getSaldo());
+        operacao.setTipoTransacao(tipoTransacao);
+        if(operacao instanceof TransferirDTO){
+            ((TransferirDTO) operacao).setIdContaOrigem(transacao.getConta().getContaId());
+            ((TransferirDTO) operacao).setIdContaDestino(transacao.getIdContaDestino());
+        }
+
+        cliente.forEach(c -> c .getConta().getTransacoes().add(transacaoRepositorio.save(transacao)));
+        cliente.forEach(clienteServico::salvarCliente);
+
+        return operacao;
+    }
+
+    private Double retornoSaldoSaque(Cliente cliente, SacarDTO sacar){
+        if(cliente.getConta().getSaldo() < sacar.getValor()){
+            throw new SaldoInsuficienteException("O saldo de " + cliente.getNome() + " é insuficiente");
+        }
+
+        Double novoSaldo =  cliente.getConta().getSaldo() - sacar.getValor();
+        cliente.getConta().setSaldo(novoSaldo);
+
+        return novoSaldo;
+    }
+
+    public Double retornoSaldoDeposito(Cliente cliente, DepositarDTO deposito){
+        Double saldo = deposito.getValor() + cliente.getConta().getSaldo();
+         cliente.getConta().setSaldo(saldo);
+         return cliente.getConta().getSaldo();
     }
 }

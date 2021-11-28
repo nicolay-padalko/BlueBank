@@ -34,6 +34,10 @@ public abstract class OperacaoDTO {
         this.tipoTransacao = transacao.getTipoTransacao();
     }
 
+    public OperacaoDTO(Double valor){
+        this.valor = valor;
+    }
+
     public Double getValor() {
         return valor;
     }
