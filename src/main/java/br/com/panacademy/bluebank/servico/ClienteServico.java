@@ -40,6 +40,12 @@ public class ClienteServico {
         return new ClienteDTO(cliente);
     }
 
+    @Transactional(readOnly = true)
+    Cliente filtrarClientePorContaId(Long contaId){
+        return clienteRepositorio.findByClienteByContaId(contaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de conta id: "+ contaId +" não encontrado."));
+    }
+
     @Transactional
     public ClienteDTO salvarCliente(Cliente cliente) {
         Conta conta = new Conta();
