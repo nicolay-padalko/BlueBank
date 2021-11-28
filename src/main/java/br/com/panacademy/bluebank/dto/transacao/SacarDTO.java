@@ -5,7 +5,6 @@ import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 
 public class SacarDTO {
 
-
     private Double valor;
     private Double saldo;
     private String descricao;
@@ -14,11 +13,15 @@ public class SacarDTO {
     public SacarDTO() {
     }
 
-
-
     public SacarDTO(Transacao transacao, Double saldo){
         this.valor = transacao.getValor();
         this.saldo = saldo;
+        this.descricao = transacao.getDescricao();
+        this.tipoTransacao = transacao.getTipoTransacao();
+    }
+
+    public SacarDTO(Transacao transacao){
+        this.valor = transacao.getValor();
         this.descricao = transacao.getDescricao();
         this.tipoTransacao = transacao.getTipoTransacao();
     }

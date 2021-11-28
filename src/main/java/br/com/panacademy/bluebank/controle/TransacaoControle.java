@@ -1,5 +1,6 @@
 package br.com.panacademy.bluebank.controle;
 
+import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
@@ -26,6 +27,16 @@ public class TransacaoControle {
     public ResponseEntity<SacarDTO> sacar(@PathVariable("clienteId") Long id, @RequestBody SacarDTO dto){
         dto = transacaoServico.sacar(id, dto);
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping(value = "transferir/{clienteIdOrigem}/{clienteIdDestino}")
+    public ResponseEntity<TransferirDTO> transferir(@PathVariable("clienteIdOrigem") Long idOrigem,
+                                                    @PathVariable("clienteIdDestino") Long idDestino,
+                                                    @RequestBody TransferirDTO dto){
+
+        dto = transacaoServico.transferir(idOrigem, idDestino, dto);
+        return ResponseEntity.ok(dto);
+
     }
 
 }

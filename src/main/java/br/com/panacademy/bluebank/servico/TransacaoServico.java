@@ -2,9 +2,11 @@ package br.com.panacademy.bluebank.servico;
 
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
+import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
 import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
@@ -71,5 +73,33 @@ public class TransacaoServico {
         clienteRepositorio.save(cliente);
 
         return new SacarDTO(transacao, saldo);
+    }
+
+    @Transactional
+    public TransferirDTO transferir(Long idOrigem, Long idDestino, TransferirDTO dto) {
+        Cliente clienteOrigem = clienteRepositorio.findById(idOrigem)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idOrigem));
+
+        Cliente clienteDestino = clienteRepositorio.findById(idDestino)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idDestino));
+
+        Transacao transacao = new Transacao();
+        transacao.setTipoTransacao(TipoTransacao.TRANSFERENCIA);
+        transacao.setDescricao(dto.getDescricao());
+        transacao.setValor(dto.getValor());
+        transacao.setConta(clienteOrigem.getConta());
+        transacao.setIdContaDestino(clienteDestino.getConta().getContaId());
+
+        try {
+            sacar(clienteOrigem.getId(), new SacarDTO(transacao));
+            depositar(clienteDestino.getId(), new DepositarDTO(transacao));
+            clienteOrigem.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
+            clienteDestino.getConta().getTransacoes().add(transacaoRepositorio.save(transacao));
+        } catch (RecursoNaoEncontradoException | SaldoInsuficienteException e){
+            System.out.println("TESTANDO");
+        }
+
+        return new TransferirDTO(transacao);
+
     }
 }

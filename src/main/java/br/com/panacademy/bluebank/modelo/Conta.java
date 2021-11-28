@@ -27,7 +27,7 @@ public class Conta {
     @CreationTimestamp
     private LocalDateTime criadoEm;
 
-    @OneToMany(mappedBy = "conta")
+    @OneToMany(mappedBy = "conta", fetch = FetchType.EAGER)
     private List<Transacao> transacoes = new ArrayList<>();
 
     public Conta() {

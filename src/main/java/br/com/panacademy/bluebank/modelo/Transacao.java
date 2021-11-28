@@ -3,6 +3,7 @@ package br.com.panacademy.bluebank.modelo;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,15 +32,19 @@ public class Transacao {
     @JoinColumn(name = "conta_id")
     private Conta conta;
 
+    @Column(name = "conta_destino_id")
+    private Long idContaDestino = 0L;
+
     public Transacao() {
     }
 
-    public Transacao (Long id, TipoTransacao tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor) {
+    public Transacao (Long id, TipoTransacao tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor, Long idContaDestino) {
         this.id = id;
         this.tipoTransacao = tipoTransacao;
         this.descricao = descricao;
         this.dataTransacao = dataTransacao;
         this.valor = valor;
+        this.idContaDestino = idContaDestino;
     }
 
     public TipoTransacao getTipoTransacao() {
@@ -88,6 +93,14 @@ public class Transacao {
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public Long getIdContaDestino() {
+        return idContaDestino;
+    }
+
+    public void setIdContaDestino(Long idContaDestino) {
+        this.idContaDestino = idContaDestino;
     }
 }
 
