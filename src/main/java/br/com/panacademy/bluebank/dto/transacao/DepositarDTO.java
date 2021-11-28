@@ -1,42 +1,22 @@
 package br.com.panacademy.bluebank.dto.transacao;
 
-import br.com.panacademy.bluebank.dto.TransacaoDTO;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 
-public class DepositarDTO {
-
-    private Double valor;
-    private String descricao;
-    private TipoTransacao tipoTransacao;
-
-    public DepositarDTO(Transacao transacao){
-        this.valor = transacao.getValor();
-        this.descricao = transacao.getDescricao();
-        this.tipoTransacao = transacao.getTipoTransacao();
-    }
+public class DepositarDTO extends OperacaoDTO {
 
     public DepositarDTO() {
     }
 
-    public Double getValor() {
-        return valor;
+    public DepositarDTO(Double valor, Double saldo, String descricao, TipoTransacao tipoTransacao) {
+        super(valor, saldo, descricao, tipoTransacao);
     }
 
-    public void setValor(Double valor) {
-        this.valor = valor;
+    public DepositarDTO(Transacao transacao) {
+        super(transacao);
     }
 
-    public String getDescricao() {
-        return descricao;
+    public DepositarDTO(Transacao transacao, Double saldo) {
+        super(transacao, saldo);
     }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public TipoTransacao getTipoTransacao() {
-        return tipoTransacao;
-    }
-
 }

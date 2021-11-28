@@ -1,38 +1,23 @@
 package br.com.panacademy.bluebank.dto.transacao;
 
 import br.com.panacademy.bluebank.modelo.Transacao;
+import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 
-public class TransferirDTO {
+public class TransferirDTO extends OperacaoDTO {
 
-    private Double valor;
-    private String descricao;
     private Long idContaOrigem;
     private Long idContaDestino;
 
-    public TransferirDTO(Transacao transacao) {
-        this.valor = transacao.getValor();
-        this.descricao = transacao.getDescricao();
-        this.idContaOrigem = transacao.getConta().getContaId();
-        this.idContaDestino = transacao.getIdContaDestino();
+    public TransferirDTO(Double valor, Double saldo, String descricao, TipoTransacao tipoTransacao, Long idContaOrigem, Long idContaDestino) {
+        super(valor, saldo, descricao, tipoTransacao);
+        this.idContaOrigem = idContaOrigem;
+        this.idContaDestino = idContaDestino;
     }
 
-    public TransferirDTO() {
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public TransferirDTO(Transacao transacao, Double saldo, Long idContaOrigem, Long idContaDestino) {
+        super(transacao, saldo);
+        this.idContaOrigem = idContaOrigem;
+        this.idContaDestino = idContaDestino;
     }
 
     public Long getIdContaOrigem() {
