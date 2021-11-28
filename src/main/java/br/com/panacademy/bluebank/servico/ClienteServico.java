@@ -48,13 +48,15 @@ public class ClienteServico {
 
     @Transactional
     public ClienteDTO salvarCliente(Cliente cliente) {
-        Conta conta = new Conta();
-        conta.setSaldo(0.0);
-        Conta contaSalva = contaRepositorio.save(conta);
+        if(cliente.getConta() == null){
+            Conta conta = new Conta();
+            conta.setSaldo(0.0);
+            Conta contaSalva = contaRepositorio.save(conta);
+            cliente.setConta(contaSalva);
+        }
 
         ClienteDTO clienteDTO = new ClienteDTO();
         BeanUtils.copyProperties(cliente, clienteDTO);
-        cliente.setConta(contaSalva);
 
         clienteRepositorio.save(cliente);
         return new ClienteDTO(cliente);
