@@ -17,21 +17,21 @@ public class TransacaoControle {
         this.transacaoServico = transacaoServico;
     }
 
-    @PostMapping(value = "depositar/{clienteId}")
-    public ResponseEntity<DepositarDTO> depositar(@PathVariable("clienteId") Long id, @RequestBody DepositarDTO dto){
+    @PostMapping(value = "depositar/{contaId}")
+    public ResponseEntity<DepositarDTO> depositar(@PathVariable("contaId") Long id, @RequestBody DepositarDTO dto){
         dto = transacaoServico.depositar(id, dto);
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(value = "sacar/{clienteId}")
-    public ResponseEntity<SacarDTO> sacar(@PathVariable("clienteId") Long id, @RequestBody SacarDTO dto){
+    @PostMapping(value = "sacar/{contaId}")
+    public ResponseEntity<SacarDTO> sacar(@PathVariable("contaId") Long id, @RequestBody SacarDTO dto){
         dto = transacaoServico.sacar(id, dto);
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(value = "transferir/{clienteIdOrigem}/{clienteIdDestino}")
-    public ResponseEntity<TransferirDTO> transferir(@PathVariable("clienteIdOrigem") Long idOrigem,
-                                                    @PathVariable("clienteIdDestino") Long idDestino,
+    @PostMapping(value = "transferir/{contaIdOrigem}/{contaIdDestino}")
+    public ResponseEntity<TransferirDTO> transferir(@PathVariable("contaIdOrigem") Long idOrigem,
+                                                    @PathVariable("contaIdDestino") Long idDestino,
                                                     @RequestBody TransferirDTO dto){
 
         dto = transacaoServico.transferir(idOrigem, idDestino, dto);
