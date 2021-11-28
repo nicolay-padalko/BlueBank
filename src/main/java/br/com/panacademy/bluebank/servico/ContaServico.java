@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +35,11 @@ public class ContaServico {
         }
     }
 
+    public ContaDTO filtrarContaPorId(Long id) {
+        Conta conta = contaRepositorio.findById(id).
+                orElseThrow(() -> new RecursoNaoEncontradoException("Conta não encontrado: "+id));
+        return new ContaDTO(conta);
+    }
 }
 
 
