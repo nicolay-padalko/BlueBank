@@ -26,3 +26,5 @@ sudo docker-compose up mysql
 * Joanantha Matheus Vieira
 * Jéssica Correa - jessicacorreaes
 * Giselle Forjaz
+* Chrystian Medeiros de Oliveira - oChrys
+* Jéssika Sousa - jessikasousa
