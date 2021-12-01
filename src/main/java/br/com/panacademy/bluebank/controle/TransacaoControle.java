@@ -4,6 +4,7 @@ import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
+import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +44,8 @@ public class TransacaoControle {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransferirDTO>> listarTodasTransacoes(){
-        List<TransferirDTO> listaTransacoesDTO = transacaoServico.listarTodos();
+    public ResponseEntity<List<Transacao>> listarTodasTransacoes(){
+        List<Transacao> listaTransacoesDTO = transacaoServico.listarTodos();
         return ResponseEntity.ok(listaTransacoesDTO);
     }
 

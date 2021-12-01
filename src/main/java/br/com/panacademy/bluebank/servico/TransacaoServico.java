@@ -108,8 +108,9 @@ public class TransacaoServico {
          return cliente.getConta().getSaldo();
     }
 
-    public List<TransferirDTO> listarTodos(){
+    public List<Transacao> listarTodos(){
         List<Transacao> transferir = transacaoRepositorio.findAll();
-        return transferir.stream().map(TransferirDTO::new).collect(Collectors.toList());
+        return transferir;
+
     }
 }
