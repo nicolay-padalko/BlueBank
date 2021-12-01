@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -105,5 +106,10 @@ public class TransacaoServico {
         Double saldo = deposito.getValor() + cliente.getConta().getSaldo();
          cliente.getConta().setSaldo(saldo);
          return cliente.getConta().getSaldo();
+    }
+
+    public List<TransferirDTO> listarTodos(){
+        List<Transacao> transferir = transacaoRepositorio.findAll();
+        return transferir.stream().map(TransferirDTO::new).collect(Collectors.toList());
     }
 }

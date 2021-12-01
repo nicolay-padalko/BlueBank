@@ -20,6 +20,10 @@ public class TransferirDTO extends OperacaoDTO {
 
     public TransferirDTO(Transacao transacao) {
         super(transacao);
+        if(transacao.getTipoTransacao().equals(TipoTransacao.TRANSFERENCIA)){
+            this.idContaOrigem = transacao.getConta().getContaId();
+            this.idContaDestino = transacao.getIdContaDestino();
+        }
     }
 
     public TransferirDTO(Transacao transacao, Double saldo, Long idContaOrigem, Long idContaDestino) {
