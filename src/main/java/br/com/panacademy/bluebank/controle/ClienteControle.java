@@ -1,10 +1,13 @@
 package br.com.panacademy.bluebank.controle;
 
+import br.com.panacademy.bluebank.config.AWSSNSConfig;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.SubscribeRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -16,11 +19,14 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteControle {
 
-
     private final ClienteServico clienteServico;
+    private final AmazonSNSClient snsClient;
 
-    public ClienteControle(ClienteServico clienteServico) {
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:blue-bank-squad-2";
+
+    public ClienteControle(ClienteServico clienteServico, AWSSNSConfig snsClient, AmazonSNSClient snsClient1) {
         this.clienteServico = clienteServico;
+        this.snsClient = snsClient1;
     }
 
 
@@ -60,6 +66,12 @@ public class ClienteControle {
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @PostMapping("/cadastrarEmail/{email}")
+    public void subscreverCliente(@PathVariable("email") String email){
+        SubscribeRequest request = new SubscribeRequest(TOPIC_ARN, "email", email);
+        snsClient.subscribe(request);
     }
 
 }

@@ -14,8 +14,8 @@ import java.util.List;
 public class Conta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "gerador")
-    @SequenceGenerator(name="gerador", sequenceName="db_conta_gerador", initialValue = 50000, allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "gerador")
+    @SequenceGenerator(name="gerador", sequenceName="db_conta_gerador", initialValue = 5004, allocationSize = 10)
     @Column(name = "conta_id")
     private Long contaId;
 

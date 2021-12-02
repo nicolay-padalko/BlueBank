@@ -1,6 +1,5 @@
 package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;

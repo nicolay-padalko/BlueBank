@@ -2,13 +2,7 @@ package br.com.panacademy.bluebank.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tb_cliente")
@@ -26,7 +20,7 @@ public class Cliente {
 
     private String senha;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "conta_id", referencedColumnName = "conta_id")
     private Conta conta;
 

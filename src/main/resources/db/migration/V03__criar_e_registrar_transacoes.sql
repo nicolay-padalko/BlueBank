@@ -8,6 +8,6 @@ CREATE TABLE tb_transacao(
     FOREIGN KEY (conta_id) REFERENCES tb_conta (conta_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
-INSERT INTO tb_transacao (id, tipo_transacao, data_transacao, descricao, valor, conta_id) VALUES (1, "DEPOSITO", now(), "", 50.00, 50001);
-INSERT INTO tb_transacao (id, tipo_transacao, data_transacao, descricao, valor, conta_id) VALUES (2, "TRANSFERENCIA", now(), "", 10.00, 50002);
-INSERT INTO tb_transacao (id, tipo_transacao, data_transacao, descricao, valor, conta_id) VALUES (3, "SAQUE", now(), "", 10.00, 50003);
+INSERT INTO tb_transacao (id, tipo_transacao, data_transacao, descricao, valor, conta_id) VALUES (1, "DEPOSITO", now(), "", 50.00, 5001);
+INSERT INTO tb_transacao (id, tipo_transacao, data_transacao, descricao, valor, conta_id) VALUES (2, "TRANSFERENCIA", now(), "", 10.00, 5002);
+INSERT INTO tb_transacao (id, tipo_transacao, data_transacao, descricao, valor, conta_id) VALUES (3, "SAQUE", now(), "", 10.00, 5003);
