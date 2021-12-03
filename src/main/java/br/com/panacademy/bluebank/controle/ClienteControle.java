@@ -22,7 +22,7 @@ public class ClienteControle {
     private final ClienteServico clienteServico;
     private final AmazonSNSClient snsClient;
 
-    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:blue-bank-squad-2";
+    String TOPIC_ARN = "CRIAR E COLOCAR";
 
     public ClienteControle(ClienteServico clienteServico, AWSSNSConfig snsClient, AmazonSNSClient snsClient1) {
         this.clienteServico = clienteServico;
