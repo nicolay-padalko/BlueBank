@@ -63,14 +63,10 @@ public class TransacaoServico {
 
         List<Cliente> lista = new ArrayList<>();
 
-        try {
-            clienteOrigem.getConta().setSaldo(retornoSaldoSaque(clienteOrigem, new SacarDTO(transferir)));
-            clienteDestino.getConta().setSaldo(retornoSaldoDeposito(clienteDestino, new DepositarDTO(transferir)));
-            lista.add(clienteOrigem);
-            lista.add(clienteDestino);
-        } catch (RecursoNaoEncontradoException | SaldoInsuficienteException e){
-            System.out.println("TESTANDO");
-        }
+        clienteOrigem.getConta().setSaldo(retornoSaldoSaque(clienteOrigem, new SacarDTO(transferir)));
+        clienteDestino.getConta().setSaldo(retornoSaldoDeposito(clienteDestino, new DepositarDTO(transferir)));
+        lista.add(clienteOrigem);
+        lista.add(clienteDestino);
 
         return operacao(transferir, lista, TipoTransacao.TRANSFERENCIA);
     }

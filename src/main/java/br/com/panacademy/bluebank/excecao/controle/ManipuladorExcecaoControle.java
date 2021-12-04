@@ -18,7 +18,7 @@ import java.time.Instant;
 public class ManipuladorExcecaoControle {
 
 
-    private ResponseEntity<ErroModelo> getErroModeloResponseEntity(RuntimeException e, HttpServletRequest requisicao, HttpStatus status, String mensagemErro) {
+    private <R extends ErroModelo> ResponseEntity<R> getErroModeloResponseEntity(Exception e, HttpServletRequest requisicao, HttpStatus status, String mensagemErro) {
         ErroModelo erro = new ErroModelo();
         erro.setTimestamp(Instant.now());
         erro.setStatus(status.value());
@@ -26,7 +26,15 @@ public class ManipuladorExcecaoControle {
         erro.setMessage(e.getMessage());
         erro.setPath(requisicao.getRequestURI());
 
-        return ResponseEntity.status(status).body(erro);
+        if(e instanceof MethodArgumentNotValidException){
+            ErroValidacao erroValidacao = (ErroValidacao) erro;
+            for (FieldError f : ((MethodArgumentNotValidException)e).getBindingResult().getFieldErrors()){
+                erroValidacao.adicionarErros(f.getField(), f.getDefaultMessage());
+            }
+            return (ResponseEntity<R>) ResponseEntity.status(status).body(erroValidacao);
+        }
+
+        return (ResponseEntity<R>) ResponseEntity.status(status).body(erro);
     }
 
     @ExceptionHandler(RecursoNaoEncontradoException.class)
@@ -46,17 +54,19 @@ public class ManipuladorExcecaoControle {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroValidacao> ErroValidacao(MethodArgumentNotValidException e, HttpServletRequest requisicao) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErroValidacao erro = new ErroValidacao();
-        erro.setTimestamp(Instant.now());
-        erro.setStatus(status.value());
-        erro.setError("Erro na validação dos campos");
-        erro.setMessage(e.getMessage());
-        erro.setPath(requisicao.getRequestURI());
+//        ErroValidacao erro = new ErroValidacao();
+//        erro.setTimestamp(Instant.now());
+//        erro.setStatus(status.value());
+//        erro.setError("Erro na validação dos campos");
+//        erro.setMessage(e.getMessage());
+//        erro.setPath(requisicao.getRequestURI());
+//
+//        for (FieldError f : e.getBindingResult().getFieldErrors()){
+//            erro.adicionarErros(f.getField(), f.getDefaultMessage());
+//        }
+//        return ResponseEntity.status(status).body(erro);
 
-        for (FieldError f : e.getBindingResult().getFieldErrors()){
-            erro.adicionarErros(f.getField(), f.getDefaultMessage());
-        }
-        return ResponseEntity.status(status).body(erro);
+        return getErroModeloResponseEntity(e, requisicao, status, "Erro na validação dos campos");
     }
 
 }
