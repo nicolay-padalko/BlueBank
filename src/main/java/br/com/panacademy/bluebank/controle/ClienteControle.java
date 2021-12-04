@@ -47,11 +47,7 @@ public class ClienteControle {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> salvarCliente(@Valid @RequestBody CadastrarClienteDTO cliente, BindingResult result){
-        if(result.hasErrors()){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ClienteDTO());
-        }
-
+    public ResponseEntity<ClienteDTO> salvarCliente(@Valid @RequestBody CadastrarClienteDTO cliente){
         ClienteDTO clienteDTO = clienteServico.salvarCliente(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(clienteDTO.getId()).toUri();

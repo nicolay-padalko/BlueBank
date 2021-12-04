@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 public class CadastrarClienteDTO {
 
 
-    @NotNull
+    @NotBlank(message = "O campo nome não pode estar em branco")
     @Size(min=2, max=30)
     private String nome;
 
@@ -22,8 +22,8 @@ public class CadastrarClienteDTO {
 //    @Pattern(regexp="(^$|[0-9]{9})")
     private String telefone;
 
-    @NotNull
-    @CPF(message = "CPF NAO PODE SER NULO")
+    @NotBlank(message = "O campo CPF não pode estar em branco")
+    @CPF(message = "Você deve inserir um CPF válido")
     private String cpf;
 
     @NotNull
