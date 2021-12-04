@@ -4,7 +4,6 @@ import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
 import br.com.panacademy.bluebank.excecao.modelo.ErroModelo;
 import br.com.panacademy.bluebank.excecao.modelo.ErroValidacao;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
