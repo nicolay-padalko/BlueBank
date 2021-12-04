@@ -1,3 +1,4 @@
+
 package br.com.panacademy.bluebank.excecao.modelo;
 
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ public class ErroValidacao extends ErroModelo {
         return erros;
     }
 
+
     public void adicionarErros(String nomeCampo, String mensagem) {
         erros.add(new CampoMensagem(nomeCampo, mensagem));
     }
-
 
 }
