@@ -2,9 +2,14 @@ package br.com.panacademy.bluebank.dto.cliente;
 
 import br.com.panacademy.bluebank.modelo.Cliente;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+
 public class AtualizarClienteDTO {
     private String telefone;
+    @Email
     private String email;
+    @Size(min=8, max=30)
     private String senha;
 
     public AtualizarClienteDTO() {

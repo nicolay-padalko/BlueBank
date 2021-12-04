@@ -6,6 +6,7 @@ import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 public class TransferirDTO extends OperacaoDTO {
 
     private Long idContaOrigem;
+
     private Long idContaDestino;
 
 

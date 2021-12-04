@@ -3,8 +3,14 @@ package br.com.panacademy.bluebank.dto.transacao;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
+
 public abstract class OperacaoDTO {
 
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=3, fraction=2)
     private Double valor;
     private Double saldo;
     private String descricao;

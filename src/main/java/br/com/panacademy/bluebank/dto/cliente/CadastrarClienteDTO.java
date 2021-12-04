@@ -23,7 +23,7 @@ public class CadastrarClienteDTO {
     private String telefone;
 
     @NotNull
-    @CPF
+    @CPF(message = "CPF NAO PODE SER NULO")
     private String cpf;
 
     @NotNull
