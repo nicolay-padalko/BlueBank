@@ -3,9 +3,12 @@ package br.com.panacademy.bluebank.dto.cliente;
 import br.com.panacademy.bluebank.modelo.Cliente;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class AtualizarClienteDTO {
+
+    @Pattern(regexp="^((\\(\\d{2}\\))|\\d{2})[- .]?\\d{5}[- .]?\\d{4}$")
     private String telefone;
     @Email
     private String email;

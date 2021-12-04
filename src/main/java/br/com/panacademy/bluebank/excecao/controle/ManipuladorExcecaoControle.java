@@ -18,11 +18,11 @@ import java.time.Instant;
 public class ManipuladorExcecaoControle {
 
 
-    private ResponseEntity<ErroModelo> getErroModeloResponseEntity(RuntimeException e, HttpServletRequest requisicao, HttpStatus status) {
+    private ResponseEntity<ErroModelo> getErroModeloResponseEntity(RuntimeException e, HttpServletRequest requisicao, HttpStatus status, String mensagemErro) {
         ErroModelo erro = new ErroModelo();
         erro.setTimestamp(Instant.now());
         erro.setStatus(status.value());
-        erro.setError("O recurso não foi encontrado");
+        erro.setError(mensagemErro);
         erro.setMessage(e.getMessage());
         erro.setPath(requisicao.getRequestURI());
 
@@ -33,14 +33,14 @@ public class ManipuladorExcecaoControle {
     public ResponseEntity<ErroModelo> ManipuladorRecursoNaoEncontrado(RuntimeException e, HttpServletRequest requisicao) {
 
         HttpStatus status = HttpStatus.NOT_FOUND;
-        return getErroModeloResponseEntity(e, requisicao, status);
+        return getErroModeloResponseEntity(e, requisicao, status, "O recuso nao foi encontrado");
     }
 
     @ExceptionHandler(SaldoInsuficienteException.class)
     public ResponseEntity<ErroModelo> ManipuladorSaldoInsuficiente(RuntimeException e, HttpServletRequest requisicao) {
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        return getErroModeloResponseEntity(e, requisicao, status);
+        return getErroModeloResponseEntity(e, requisicao, status, "O saldo nao e suficiente");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -23,7 +23,6 @@ public class AWSSNSConfig {
                 withRegion(Regions.US_EAST_1).
                 withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY))).
                 build();
-
     }
 
 }
