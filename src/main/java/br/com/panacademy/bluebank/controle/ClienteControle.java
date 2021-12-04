@@ -3,15 +3,19 @@ package br.com.panacademy.bluebank.controle;
 import br.com.panacademy.bluebank.config.AWSSNSConfig;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.SubscribeRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -43,7 +47,11 @@ public class ClienteControle {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDTO> salvarCliente(@RequestBody Cliente cliente){
+    public ResponseEntity<ClienteDTO> salvarCliente(@Valid @RequestBody CadastrarClienteDTO cliente, BindingResult result){
+        if(result.hasErrors()){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ClienteDTO());
+        }
+
         ClienteDTO clienteDTO = clienteServico.salvarCliente(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(clienteDTO.getId()).toUri();

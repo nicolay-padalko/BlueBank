@@ -2,6 +2,7 @@ package br.com.panacademy.bluebank.servico;
 
 import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Cliente;
@@ -60,6 +61,23 @@ public class ClienteServico {
 
         clienteRepositorio.save(cliente);
         return new ClienteDTO(cliente);
+    }
+
+    @Transactional
+    public ClienteDTO salvarCliente(CadastrarClienteDTO cliente) {
+            Conta conta = new Conta();
+            conta.setSaldo(0.0);
+            Conta contaSalva = contaRepositorio.save(conta);
+            cliente.setConta(contaSalva);
+
+
+        ClienteDTO clienteDTO = new ClienteDTO();
+        BeanUtils.copyProperties(cliente, clienteDTO);
+
+        Cliente cliente1 = cliente.toCliente();
+
+        clienteRepositorio.save(cliente1);
+        return new ClienteDTO(cliente1);
     }
 
     public void deletarCliente(Long id) {
