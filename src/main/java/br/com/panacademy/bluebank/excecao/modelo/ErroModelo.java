@@ -13,6 +13,14 @@ public class ErroModelo {
     public ErroModelo() {
     }
 
+    public ErroModelo(Instant timestamp, Integer status, String error, String message, String path) {
+        this.timestamp = timestamp;
+        this.status = status;
+        this.error = error;
+        this.message = message;
+        this.path = path;
+    }
+
     public Instant getTimestamp() {
         return timestamp;
     }
