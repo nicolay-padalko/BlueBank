@@ -4,6 +4,7 @@ import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
 import br.com.panacademy.bluebank.excecao.modelo.ErroModelo;
 import br.com.panacademy.bluebank.excecao.modelo.ErroValidacao;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -18,40 +19,37 @@ import java.time.Instant;
 public class ManipuladorExcecaoControle {
 
 
-    private ResponseEntity<ErroModelo> getErroModeloResponseEntity(RuntimeException e, HttpServletRequest requisicao, HttpStatus status) {
-        ErroModelo erro = new ErroModelo();
+    private ErroModelo getErroModelo(Exception e, HttpServletRequest requisicao, HttpStatus status, ErroModelo erro) {
         erro.setTimestamp(Instant.now());
         erro.setStatus(status.value());
         erro.setError("O recurso não foi encontrado");
         erro.setMessage(e.getMessage());
         erro.setPath(requisicao.getRequestURI());
 
-        return ResponseEntity.status(status).body(erro);
+        return erro;
     }
 
     @ExceptionHandler(RecursoNaoEncontradoException.class)
     public ResponseEntity<ErroModelo> ManipuladorRecursoNaoEncontrado(RuntimeException e, HttpServletRequest requisicao) {
-
+        ErroModelo erroModelo = new ErroModelo();
         HttpStatus status = HttpStatus.NOT_FOUND;
-        return getErroModeloResponseEntity(e, requisicao, status);
+
+        return ResponseEntity.status(status).body(getErroModelo(e, requisicao, status, erroModelo));
     }
 
     @ExceptionHandler(SaldoInsuficienteException.class)
     public ResponseEntity<ErroModelo> ManipuladorSaldoInsuficiente(RuntimeException e, HttpServletRequest requisicao) {
+        ErroModelo erroModelo = new ErroModelo();
+        HttpStatus status = HttpStatus.NOT_FOUND;
 
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        return getErroModeloResponseEntity(e, requisicao, status);
+        return ResponseEntity.status(status).body(getErroModelo(e, requisicao, status, erroModelo));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroValidacao> ErroValidacao(MethodArgumentNotValidException e, HttpServletRequest requisicao) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErroValidacao erro = new ErroValidacao();
-        erro.setTimestamp(Instant.now());
-        erro.setStatus(status.value());
-        erro.setError("Erro na validação dos campos");
-        erro.setMessage(e.getMessage());
-        erro.setPath(requisicao.getRequestURI());
+
+        ErroValidacao erro = new ErroValidacao(getErroModelo(e, requisicao, status, new ErroModelo()));
 
         for (FieldError f : e.getBindingResult().getFieldErrors()){
             erro.adicionarErros(f.getField(), f.getDefaultMessage());
