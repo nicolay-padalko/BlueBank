@@ -6,6 +6,7 @@ import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public abstract class OperacaoDTO {
 
@@ -13,6 +14,7 @@ public abstract class OperacaoDTO {
     @Digits(integer=3, fraction=2)
     private Double valor;
     private Double saldo;
+    @Size(max=200)
     private String descricao;
     private TipoTransacao tipoTransacao;
 

@@ -13,21 +13,20 @@ public class CadastrarClienteDTO {
     @Size(min=2, max=30)
     private String nome;
 
-    @NotNull
+    @NotBlank(message = "O campo sobrenome não pode estar em branco")
     @Size(min=2, max=30)
     private String sobrenome;
 
-    @NotNull
-    @Size(min=2, max=30)
-//    @Pattern(regexp="(^$|[0-9]{9})")
+    @NotBlank(message = "O campo telefone não pode estar em branco")
+    @Pattern(regexp="^((\\(\\d{2}\\))|\\d{2})[- .]?\\d{5}[- .]?\\d{4}$")
     private String telefone;
 
     @NotBlank(message = "O campo CPF não pode estar em branco")
     @CPF(message = "Você deve inserir um CPF válido")
     private String cpf;
 
-    @NotNull
-    @Size(min=2, max=30)
+    @NotBlank(message = "O campo email não pode estar em branco")
+    @Email
     private String email;
 
     @NotNull
