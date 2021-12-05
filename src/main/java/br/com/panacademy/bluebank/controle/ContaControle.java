@@ -33,14 +33,14 @@ public class ContaControle {
     }
 
     @GetMapping(value = "/{id}")
-    @ApiOperation("Busca uma conta pelo ID")
+    @ApiOperation("Busca uma conta, filtrando pelo ID")
     public ResponseEntity<ContaDTO> filtrarContaPorId(@PathVariable Long id) {
         ContaDTO conta = contaServico.filtrarContaPorId(id);
         return ResponseEntity.ok(conta);
     }
 
     @DeleteMapping(value = "/{id}")
-    @ApiOperation("Deleta uma conta")
+    @ApiOperation("Deleta uma conta, filtrando pelo ID")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         contaServico.deletarConta(id);
         return ResponseEntity.noContent().build();

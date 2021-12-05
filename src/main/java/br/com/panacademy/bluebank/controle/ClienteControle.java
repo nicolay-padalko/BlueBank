@@ -5,6 +5,8 @@ import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/clientes")
 public class ClienteControle {
 
@@ -25,18 +28,21 @@ public class ClienteControle {
 
 
     @GetMapping
+    @ApiOperation(("Lista todos os clientes"))
     public ResponseEntity<List<ClienteDTO>> listarTodosClientes(){
         List<ClienteDTO> listaClientesDTO = clienteServico.listarTodos();
         return ResponseEntity.ok(listaClientesDTO);
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Busca e retorna um cliente, filtrando pelo ID")
     public ResponseEntity<ClienteDTO> filtrarPorId(@PathVariable Long id){
         ClienteDTO clienteDTO = clienteServico.filtrarPorId(id);
         return ResponseEntity.ok(clienteDTO);
     }
 
     @PostMapping
+    @ApiOperation("Cadastra um cliente, com atribuição dinâmica de ID")
     public ResponseEntity<ClienteDTO> salvarCliente(@RequestBody Cliente cliente){
         ClienteDTO clienteDTO = clienteServico.salvarCliente(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
@@ -44,19 +50,22 @@ public class ClienteControle {
         return ResponseEntity.created(uri).body(clienteDTO);
     }
 
-    @DeleteMapping(value = "/{id}") //mapear a url
-    public ResponseEntity<Void> deletar(@PathVariable Long id) { //recebendo os dados para deletar
+    @DeleteMapping(value = "/{id}")
+    @ApiOperation("Busca e deleta um cliente, filtrando pelo ID")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteServico.deletarCliente(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
+    @ApiOperation("Atualização de telefone, email e senha do cliente, filtrando pelo ID")
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody AtualizarClienteDTO dto) {
         dto = clienteServico.atualizarCliente(id, dto);
         return ResponseEntity.ok().body(dto);
     }
 
     @PutMapping("/credenciais/{id}")
+    @ApiOperation("Atualiza as credenciais do cliente, filtrando pelo ID")
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);

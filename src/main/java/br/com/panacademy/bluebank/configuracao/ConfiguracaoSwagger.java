@@ -1,5 +1,6 @@
 package br.com.panacademy.bluebank.configuracao;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -13,22 +14,27 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class ConfiguracaoSwagger {
 
+    @Bean
     public Docket BlueBankApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                    .apis(RequestHandlerSelectors.basePackage("com.panacademy.bluebank"))
+                    .apis(RequestHandlerSelectors.basePackage("br.com.panacademy.bluebank"))
                     .paths(PathSelectors.any())
                     .build()
-                .apiInfo(metaInfo());
+                    .apiInfo(apiInfo());
     }
 
-    private ApiInfo metaInfo() {
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("BlueBank")
-                .description("Requisições da aplicação")
-                .version("1.0")
+                .title("Aplicação Bluebank")
+                .description("Projeto construido em Java utilizando Spring Framework, de uma aplicação bancária digital," +
+                        "  para conclusão de treinamento da Gama Academy em parceria com o Banco Pan." +
+                        " A aplicação permite aos usuários realizarem operações de saques, depósitos, e transferências," +
+                        " como também acesso ao extrato bancário. Todas estas" +
+                        " requisições são realizadas diretamente ao backend. ")
+                .version("1.0.0")
+                .license("Apache License Version 2.0")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .build();
-
     }
-
 }
