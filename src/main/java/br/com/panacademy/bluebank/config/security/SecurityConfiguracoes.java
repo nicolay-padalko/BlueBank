@@ -1,5 +1,7 @@
 package br.com.panacademy.bluebank.config.security;
 
+import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
+import br.com.panacademy.bluebank.servico.ClienteServico;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,12 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
 
     private final AutenticacaoService autenticacaoService;
+    private final TokenServico tokenServico;
+    private final ClienteRepositorio clienteRepositorio;
 
     @Override
     @Bean
@@ -23,8 +28,10 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    public SecurityConfiguracoes(AutenticacaoService autenticacaoService) {
+    public SecurityConfiguracoes(AutenticacaoService autenticacaoService, TokenServico tokenServico, ClienteRepositorio clienteRepositorio) {
         this.autenticacaoService = autenticacaoService;
+        this.tokenServico = tokenServico;
+        this.clienteRepositorio = clienteRepositorio;
     }
 
     @Override
@@ -40,7 +47,8 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, clienteRepositorio), UsernamePasswordAuthenticationFilter.class);
 
     }
 

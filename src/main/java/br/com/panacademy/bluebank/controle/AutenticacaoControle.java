@@ -2,6 +2,7 @@ package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.config.security.TokenServico;
 import br.com.panacademy.bluebank.dto.LoginDTO;
+import br.com.panacademy.bluebank.dto.TokenDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,14 +27,13 @@ public class AutenticacaoControle {
         this.tokenServico = tokenServico;
     }
     @PostMapping
-    public ResponseEntity<LoginDTO> autenticar(@RequestBody @Valid LoginDTO login){
+    public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginDTO login){
         UsernamePasswordAuthenticationToken dadosLogin =
                 new UsernamePasswordAuthenticationToken(login.getEmail(), login.getSenha());
         try {
             Authentication authenticate = authenticationManager.authenticate(dadosLogin);
             String token = tokenServico.gerarToken(authenticate);
-            System.out.println("CHRYSCHRYS" + token);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(new TokenDTO(token, "Bearer"));
         } catch (AuthenticationException e){
             return ResponseEntity.badRequest().build();
         }
