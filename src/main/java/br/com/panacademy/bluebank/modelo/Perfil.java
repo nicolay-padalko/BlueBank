@@ -1,14 +1,18 @@
 package br.com.panacademy.bluebank.modelo;
 
-import br.com.panacademy.bluebank.modelo.Utils.AbstractEntity;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 
 @Entity
-public class Perfil extends AbstractEntity<Long> implements GrantedAuthority {
+@Table(name = "tb_perfil")
+public class Perfil implements GrantedAuthority {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "perfil_id")
+    private Long id;
     private String nome;
 
     public String getNome() {
@@ -17,6 +21,14 @@ public class Perfil extends AbstractEntity<Long> implements GrantedAuthority {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

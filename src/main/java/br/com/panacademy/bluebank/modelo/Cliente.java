@@ -1,20 +1,17 @@
 package br.com.panacademy.bluebank.modelo;
 
-import br.com.panacademy.bluebank.modelo.Utils.AbstractEntity;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_cliente")
-public class Cliente extends AbstractEntity<Long> implements UserDetails {
-
+public class Cliente implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nome;
     private String sobrenome;
     private String telefone;
@@ -23,8 +20,9 @@ public class Cliente extends AbstractEntity<Long> implements UserDetails {
     private String senha;
 
     @ManyToMany
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Perfil> perfis = new ArrayList<>();
+    @JoinTable(name = "tb_cliente_perfil",
+    joinColumns = @JoinColumn(name = "tb_cliente_id"), inverseJoinColumns = @JoinColumn(name = "tb_perfil_id"))
+    private Set<Perfil> perfis = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "conta_id", referencedColumnName = "conta_id")
@@ -32,14 +30,17 @@ public class Cliente extends AbstractEntity<Long> implements UserDetails {
 
     public Cliente() {
     }
-
-    public List<Perfil> getPerfis() {
-        return perfis;
+    public Long getId() {
+        return id;
     }
 
-    public void setPerfis(List<Perfil> perfis) {
-        this.perfis = perfis;
+    public void setId(Long id) {
+        this.id = id;
     }
+
+
+
+
 
     public String getNome() {
         return nome;
@@ -95,6 +96,10 @@ public class Cliente extends AbstractEntity<Long> implements UserDetails {
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public Set<Perfil> getPerfis() {
+        return perfis;
     }
 
     @Override
