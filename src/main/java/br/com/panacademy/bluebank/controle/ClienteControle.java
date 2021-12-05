@@ -63,8 +63,8 @@ public class ClienteControle {
     @PutMapping("/{id}")
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody AtualizarClienteDTO dto) {
         dto = clienteServico.atualizarCliente(id, dto);
-        return ResponseEntity.ok().body(dto);
-    }
+            return ResponseEntity.ok().body(dto);
+        }
 
     @PutMapping("/credenciais/{id}")
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {

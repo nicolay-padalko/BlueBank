@@ -1,6 +1,5 @@
 package br.com.panacademy.bluebank.modelo;
 
-import br.com.panacademy.bluebank.modelo.Utils.AbstractEntity;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,7 +9,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_transacao")
-public class Transacao extends AbstractEntity<Long> {
+public class Transacao {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipoTransacao;
@@ -40,6 +43,14 @@ public class Transacao extends AbstractEntity<Long> {
         this.dataTransacao = dataTransacao;
         this.valor = valor;
         this.idContaDestino = idContaDestino;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public TipoTransacao getTipoTransacao() {

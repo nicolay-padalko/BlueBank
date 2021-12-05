@@ -19,7 +19,7 @@ public class Cliente implements UserDetails {
     private String email;
     private String senha;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_cliente_perfil",
     joinColumns = @JoinColumn(name = "tb_cliente_id"), inverseJoinColumns = @JoinColumn(name = "tb_perfil_id"))
     private Set<Perfil> perfis = new HashSet<>();
