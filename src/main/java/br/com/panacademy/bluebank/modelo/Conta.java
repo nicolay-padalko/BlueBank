@@ -2,6 +2,8 @@ package br.com.panacademy.bluebank.modelo;
 
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,7 +28,8 @@ public class Conta {
     @CreationTimestamp
     private LocalDateTime criadoEm;
 
-    @OneToMany(mappedBy = "conta", fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "conta")
     private List<Transacao> transacoes = new ArrayList<>();
 
     public Conta() {

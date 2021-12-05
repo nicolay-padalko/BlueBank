@@ -1,20 +1,16 @@
 package br.com.panacademy.bluebank.modelo;
 
+import br.com.panacademy.bluebank.modelo.Utils.AbstractEntity;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_transacao")
-public class Transacao {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Transacao extends AbstractEntity<Long> {
 
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipoTransacao;
@@ -38,8 +34,7 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao (Long id, TipoTransacao tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor, Long idContaDestino) {
-        this.id = id;
+    public Transacao (TipoTransacao tipoTransacao, String descricao, LocalDateTime dataTransacao, Double valor, Long idContaDestino) {
         this.tipoTransacao = tipoTransacao;
         this.descricao = descricao;
         this.dataTransacao = dataTransacao;
@@ -61,14 +56,6 @@ public class Transacao {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDateTime getDataTransacao() {

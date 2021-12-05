@@ -18,7 +18,6 @@ import java.time.Instant;
 @ControllerAdvice
 public class ManipuladorExcecaoControle {
 
-
     private ErroModelo getErroModelo(Exception e, HttpServletRequest requisicao, HttpStatus status, String mensagem) {
         ErroModelo erro = new ErroModelo();
         erro.setTimestamp(Instant.now());
