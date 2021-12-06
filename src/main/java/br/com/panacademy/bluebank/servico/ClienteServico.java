@@ -82,7 +82,7 @@ public class ClienteServico {
         BeanUtils.copyProperties(cliente, clienteDTO);
 
         Cliente cliente1 = cliente.toCliente();
-        cliente1.adicionarPefil(perfilRespositorio.findById(1L).orElseThrow(() -> new RecursoNaoEncontradoException("Perfil não encontrado ")));
+        cliente1.adicionarPefil(perfilRespositorio.findById(2L).get());
         clienteRepositorio.save(cliente1);
         return new ClienteDTO(cliente1);
     }

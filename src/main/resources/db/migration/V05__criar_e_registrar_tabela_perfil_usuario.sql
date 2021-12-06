@@ -4,8 +4,8 @@ CREATE TABLE tb_perfil(
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO tb_perfil (perfil_id, nome) VALUES (1, "ADMIN");
-INSERT INTO tb_perfil (perfil_id, nome) VALUES (2, "CLIENTE");
+INSERT INTO tb_perfil (perfil_id, nome) VALUES (1, "ROLE_ADMIN");
+INSERT INTO tb_perfil (perfil_id, nome) VALUES (2, "ROLE_CLIENTE");
 
 
 CREATE TABLE tb_cliente_perfil(
