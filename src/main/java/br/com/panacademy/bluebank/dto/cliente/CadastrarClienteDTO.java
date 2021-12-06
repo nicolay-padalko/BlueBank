@@ -8,7 +8,6 @@ import javax.validation.constraints.*;
 
 public class CadastrarClienteDTO {
 
-
     @NotBlank(message = "O campo nome não pode estar em branco")
     @Size(min=2, max=30)
     private String nome;
@@ -112,7 +111,6 @@ public class CadastrarClienteDTO {
          cliente.setEmail(this.email);
          cliente.setSenha(this.senha);
          cliente.setConta(this.conta);
-
          return cliente;
     }
 }

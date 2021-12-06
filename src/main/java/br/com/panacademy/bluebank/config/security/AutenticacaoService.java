@@ -17,10 +17,9 @@ public class AutenticacaoService implements UserDetailsService {
         this.clienteRepositorio = clienteRepositorio;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Cliente cliente = clienteRepositorio.findByEmail(s).orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: "+ s));;
+        Cliente cliente = clienteRepositorio.findByEmail(s).orElseThrow(() -> new RecursoNaoEncontradoException("Dados invalidos"));;
         return cliente;
     }
 }

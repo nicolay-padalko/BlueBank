@@ -1,4 +1,4 @@
-package br.com.panacademy.bluebank.config;
+package br.com.panacademy.bluebank.config.aws;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

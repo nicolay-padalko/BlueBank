@@ -1,7 +1,6 @@
 package br.com.panacademy.bluebank.config.security;
 
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
-import br.com.panacademy.bluebank.servico.ClienteServico;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -43,13 +42,13 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/clientes").permitAll()
-                .antMatchers(HttpMethod.GET,"/clientes/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/clientes/* ").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers("/perfil").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, clienteRepositorio), UsernamePasswordAuthenticationFilter.class);
-
     }
 
 }

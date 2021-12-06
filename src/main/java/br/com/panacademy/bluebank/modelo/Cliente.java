@@ -19,7 +19,7 @@ public class Cliente implements UserDetails {
     private String email;
     private String senha;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "tb_cliente_perfil",
     joinColumns = @JoinColumn(name = "tb_cliente_id"), inverseJoinColumns = @JoinColumn(name = "tb_perfil_id"))
     private Set<Perfil> perfis = new HashSet<>();
@@ -37,10 +37,6 @@ public class Cliente implements UserDetails {
     public void setId(Long id) {
         this.id = id;
     }
-
-
-
-
 
     public String getNome() {
         return nome;
@@ -100,6 +96,10 @@ public class Cliente implements UserDetails {
 
     public Set<Perfil> getPerfis() {
         return perfis;
+    }
+
+    public void adicionarPefil (Perfil tipoPerfil){
+        perfis.add(tipoPerfil);
     }
 
     @Override

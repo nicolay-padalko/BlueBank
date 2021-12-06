@@ -15,7 +15,6 @@ public class AtualizarCredenciaisClienteDTO {
     private String senha;
 
     public AtualizarCredenciaisClienteDTO() {
-
     }
 
     public AtualizarCredenciaisClienteDTO(Cliente entidade) {
@@ -47,4 +46,5 @@ public class AtualizarCredenciaisClienteDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
 }

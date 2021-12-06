@@ -13,7 +13,15 @@ public class Perfil implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "perfil_id")
     private Long id;
+
     private String nome;
+
+    public Perfil(String nome) {
+        this.nome = nome;
+    }
+
+    public Perfil() {
+    }
 
     public String getNome() {
         return nome;

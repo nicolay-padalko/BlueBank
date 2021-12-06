@@ -1,17 +1,14 @@
 package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.config.AWSSNSConfig;
+import br.com.panacademy.bluebank.config.aws.AWSSNSConfig;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
-import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.SubscribeRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

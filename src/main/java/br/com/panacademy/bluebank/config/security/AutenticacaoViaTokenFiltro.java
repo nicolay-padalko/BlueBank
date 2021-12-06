@@ -3,7 +3,6 @@ package br.com.panacademy.bluebank.config.security;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
-import br.com.panacademy.bluebank.servico.ClienteServico;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
