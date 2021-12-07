@@ -4,14 +4,11 @@ import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.OperacaoDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
-import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
-import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.services.sns.model.PublishRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

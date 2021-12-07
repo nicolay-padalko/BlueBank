@@ -1,6 +1,6 @@
-package br.com.panacademy.bluebank.dto.cliente;
+package br.com.panacademy.bluebank.dto.usuario.cliente;
 
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
 import org.hibernate.validator.constraints.br.CPF;
 

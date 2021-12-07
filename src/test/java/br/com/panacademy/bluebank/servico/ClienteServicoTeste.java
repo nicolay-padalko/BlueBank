@@ -1,6 +1,5 @@
 package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 

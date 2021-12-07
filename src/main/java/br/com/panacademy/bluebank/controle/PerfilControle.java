@@ -29,16 +29,11 @@ public class PerfilControle {
     }
 
     @DeleteMapping
-    public ResponseEntity<DeletarPerfilDTO> adicionarPerfil (@RequestBody @Valid DeletarPerfilDTO deletarPefil){
+    public ResponseEntity<DeletarPerfilDTO> deletarPerfil (@RequestBody @Valid DeletarPerfilDTO deletarPefil){
         Boolean deletou = perfilServico.deletarPerfil(deletarPefil);
         if(deletou){
             return ResponseEntity.ok().body(deletarPefil);
         }
         return ResponseEntity.badRequest().body(deletarPefil);
     }
-
-
-
-
-
 }

@@ -7,4 +7,3 @@ CREATE TABLE tb_conta(
 INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (5001, 0.0, now());
 INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (5002, 44.0, now());
 INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (5003, 434.5, now());
-

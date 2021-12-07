@@ -1,35 +1,34 @@
-package br.com.panacademy.bluebank.dto.cliente;
+package br.com.panacademy.bluebank.dto.usuario.funcionario;
 
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Funcionario;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class AtualizarClienteDTO {
-
-    @Pattern(regexp="^((\\(\\d{2}\\))|\\d{2})[- .]?\\d{5}[- .]?\\d{4}$")
-    private String telefone;
+public class AtualizarCredenciaisFuncionarioDTO {
+    @CPF
+    private String cpf;
     @Email
     private String email;
     @Size(min=8, max=30)
     private String senha;
 
-    public AtualizarClienteDTO() {
+    public AtualizarCredenciaisFuncionarioDTO() {
     }
 
-    public AtualizarClienteDTO(Cliente entidade) {
-        this.telefone = entidade.getCpf();
+    public AtualizarCredenciaisFuncionarioDTO(Funcionario entidade) {
+        this.cpf = entidade.getCpf();
         this.email = entidade.getEmail();
         this.senha = entidade.getSenha();
     }
 
-    public String getTelefone() {
-        return telefone;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -47,4 +46,5 @@ public class AtualizarClienteDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
 }

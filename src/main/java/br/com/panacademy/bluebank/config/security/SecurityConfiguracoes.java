@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.config.security;
 
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
+import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,7 +20,7 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
 
     private final AutenticacaoService autenticacaoService;
     private final TokenServico tokenServico;
-    private final ClienteRepositorio clienteRepositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
     @Override
     @Bean
@@ -27,10 +28,10 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    public SecurityConfiguracoes(AutenticacaoService autenticacaoService, TokenServico tokenServico, ClienteRepositorio clienteRepositorio) {
+    public SecurityConfiguracoes(AutenticacaoService autenticacaoService, TokenServico tokenServico, UsuarioRepositorio usuarioRepositorio) {
         this.autenticacaoService = autenticacaoService;
         this.tokenServico = tokenServico;
-        this.clienteRepositorio = clienteRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Override
@@ -41,14 +42,14 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/clientes").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.GET,"/clientes/*").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.GET,"/clientes").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/clientes/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers("/perfil").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, clienteRepositorio), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, usuarioRepositorio), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

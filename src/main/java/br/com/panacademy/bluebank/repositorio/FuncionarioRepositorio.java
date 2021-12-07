@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.repositorio;
 
 import br.com.panacademy.bluebank.modelo.usuario.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Funcionario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,10 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ClienteRepositorio extends JpaRepository<Cliente, Long> {
+public interface FuncionarioRepositorio extends JpaRepository<Funcionario, Long> {
 
-    @Query("SELECT c FROM Cliente c WHERE c.conta.contaId = :contaId")
-    Optional<Cliente> findByClienteByContaId(Long contaId);
+    Optional<Funcionario> findByEmail(String email);
+
 }
-
-

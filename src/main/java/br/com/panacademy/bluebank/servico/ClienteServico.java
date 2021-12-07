@@ -1,11 +1,12 @@
 package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
-import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
-import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
-import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.Perfil;
+import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;

@@ -24,23 +24,23 @@ public class PerfilServico {
     }
 
     public Boolean cadastrarPefil(CadastrarPefilDTO cadastrarPefil){
-
-        Optional<Perfil> byNome = perfilRespositorio.findByNome(String.valueOf(cadastrarPefil.getNome()));
+        String nomeRole = "ROLE_" + cadastrarPefil.getNome();
+        Optional<Perfil> byNome = perfilRespositorio.findByNome(nomeRole);
         if(byNome.isPresent()) {
-            throw new RecursoNaoEncontradoException("Perfil ja cadastrado em sistema: " + byNome.get().getNome());
+            throw new RecursoNaoEncontradoException("Perfil ja cadastrado em sistema: " + nomeRole);
         }
-        perfilRespositorio.save(new Perfil(cadastrarPefil.getNome()));
+        perfilRespositorio.save(new Perfil(nomeRole));
         return true;
     }
 
     public Boolean deletarPerfil(DeletarPerfilDTO deletarPefil){
-
-        Optional<Perfil> byNome = perfilRespositorio.findByNome(String.valueOf(deletarPefil.getNome()));
+        String nomeRole = "ROLE_" + deletarPefil.getNome();
+        Optional<Perfil> byNome = perfilRespositorio.findByNome(nomeRole);
         if(byNome.isPresent()) {
             perfilRespositorio.delete(byNome.get());
             return true;
         }
-        throw new RecursoNaoEncontradoException("Nao foi identificado o perfil " + deletarPefil.getNome() + " nos registros");
+        throw new RecursoNaoEncontradoException("Nao foi identificado o perfil " + nomeRole + " nos registros");
     }
 
 }

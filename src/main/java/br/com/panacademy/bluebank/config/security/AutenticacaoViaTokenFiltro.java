@@ -1,8 +1,10 @@
 package br.com.panacademy.bluebank.config.security;
 
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Usuario;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
+import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,11 +18,11 @@ import java.io.IOException;
 public class AutenticacaoViaTokenFiltro extends OncePerRequestFilter {
 
     private final TokenServico tokenServico;
-    private final ClienteRepositorio clienteRepositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
-    public AutenticacaoViaTokenFiltro(TokenServico tokenServico, ClienteRepositorio clienteRepositorio) {
+    public AutenticacaoViaTokenFiltro(TokenServico tokenServico, UsuarioRepositorio usuarioRepositorio) {
         this.tokenServico = tokenServico;
-        this.clienteRepositorio = clienteRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Override
@@ -37,12 +39,12 @@ public class AutenticacaoViaTokenFiltro extends OncePerRequestFilter {
     }
 
     private void autenticarCliente(String token) {
-        Long idCliente = tokenServico.getIdUsuario(token);
+        Long idUsuario = tokenServico.getIdUsuario(token);
 
-        Cliente cliente = clienteRepositorio.findById(idCliente)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idCliente));
+        Usuario usuario = usuarioRepositorio.findById(idUsuario)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario não encontrado: " + idUsuario));
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(cliente, null, cliente.getAuthorities());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
