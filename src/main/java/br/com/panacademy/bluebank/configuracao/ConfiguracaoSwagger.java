@@ -28,11 +28,14 @@ public class ConfiguracaoSwagger {
                     .paths(PathSelectors.any())
                     .build()
                     .useDefaultResponseMessages(false)
-                    .globalResponseMessage(RequestMethod.GET, responseMessageForGET())
+                    .globalResponseMessage(RequestMethod.GET, responseMessage())
+                    .globalResponseMessage(RequestMethod.POST, responseMessage())
+                    .globalResponseMessage(RequestMethod.PUT, responseMessage())
+                    .globalResponseMessage(RequestMethod.DELETE, responseMessage())
                     .apiInfo(apiInfo());
     }
 
-    private List<ResponseMessage> responseMessageForGET()
+    private List<ResponseMessage> responseMessage()
     {
         return new ArrayList<ResponseMessage>() {{
                     add(new ResponseMessageBuilder()
@@ -41,6 +44,8 @@ public class ConfiguracaoSwagger {
                     .build());
         }};
     }
+
+
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
