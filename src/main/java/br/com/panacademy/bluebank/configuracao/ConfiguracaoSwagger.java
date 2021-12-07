@@ -45,8 +45,6 @@ public class ConfiguracaoSwagger {
         }};
     }
 
-
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Aplicação Bluebank")
