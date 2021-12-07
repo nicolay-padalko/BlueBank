@@ -18,14 +18,27 @@ import java.util.List;
 public class TransacaoControle {
 
     private final TransacaoServico transacaoServico;
+    private final TokenServico tokenServico;
 
-    public TransacaoControle(TransacaoServico transacaoServico) {
+    public TransacaoControle(TransacaoServico transacaoServico, TokenServico tokenServico {
         this.transacaoServico = transacaoServico;
+        this.tokenServico = tokenServico;
     }
-
+/*
     @PostMapping(value = "depositar/{contaId}")
     public ResponseEntity<DepositarDTO> depositar(@PathVariable("contaId") Long id, @Valid @RequestBody DepositarDTO dto, BindingResult result){
         dto = transacaoServico.depositar(id, dto);
+        return ResponseEntity.ok(dto);
+    } */
+    
+    @PostMapping(value = "depositar")
+    public ResponseEntity<DepositarDTO> depositar(HttpServletRequest request, @Valid @RequestBody DepositarDTO dto, BindingResult result){
+        AutenticacaoViaTokenFiltro instancia = new AutenticacaoViaTokenFiltro();
+        String token = instancia.recuperarToken(request);
+
+        Long idUsuario = tokenServico.getIdUsuario(token);
+
+        dto = transacaoServico.depositar(idUsuario, dto);
         return ResponseEntity.ok(dto);
     }
 
