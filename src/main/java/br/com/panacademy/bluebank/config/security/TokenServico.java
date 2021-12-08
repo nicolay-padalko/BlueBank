@@ -1,6 +1,6 @@
 package br.com.panacademy.bluebank.config.security;
 
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,7 +22,7 @@ public class TokenServico {
     public String gerarToken(Authentication authenticate) {
         Date hoje = new Date();
 
-        Cliente logado = (Cliente) authenticate.getPrincipal();
+        Usuario logado = (Usuario) authenticate.getPrincipal();
 
         return Jwts.builder()
                 .setIssuer("API Blue Bank Turma 2 Squad 2")

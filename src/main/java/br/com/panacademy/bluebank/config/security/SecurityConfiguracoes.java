@@ -1,6 +1,6 @@
 package br.com.panacademy.bluebank.config.security;
 
-import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
+import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,7 +19,7 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
 
     private final AutenticacaoService autenticacaoService;
     private final TokenServico tokenServico;
-    private final ClienteRepositorio clienteRepositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
     @Override
     @Bean
@@ -27,10 +27,10 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    public SecurityConfiguracoes(AutenticacaoService autenticacaoService, TokenServico tokenServico, ClienteRepositorio clienteRepositorio) {
+    public SecurityConfiguracoes(AutenticacaoService autenticacaoService, TokenServico tokenServico, UsuarioRepositorio usuarioRepositorio) {
         this.autenticacaoService = autenticacaoService;
         this.tokenServico = tokenServico;
-        this.clienteRepositorio = clienteRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Override
@@ -41,14 +41,45 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+<<<<<<< HEAD
                 .antMatchers(HttpMethod.GET,"/clientes").permitAll()
                 .antMatchers(HttpMethod.GET,"/clientes/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers("/perfil").permitAll()
                 .anyRequest().permitAll()
+=======
+                .antMatchers(HttpMethod.POST,"/auth").permitAll()
+                .antMatchers(HttpMethod.GET,"/clientes").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/clientes").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/clientes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.PUT,"/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/clientes/credenciais/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/contas").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.GET,"/contas/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/contas/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/funcionarios").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/funcionarios").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/funcionarios/credenciais/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/funcionarios/cadastrarEmail/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/perfis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/perfis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/transacoes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/transacoes/depositar").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/transacoes/sacar").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/transacoes/transferir/*").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/transacoes/depositar/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/transacoes/sacar/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/transacoes/transferir/*/*").hasRole("ADMIN")
+                .anyRequest().denyAll()
+>>>>>>> 9a9138dbca151b7ea0b75aa5cd3c64d9cd6c64b6
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, clienteRepositorio), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, usuarioRepositorio), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

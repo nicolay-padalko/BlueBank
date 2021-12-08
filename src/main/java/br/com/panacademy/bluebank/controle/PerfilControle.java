@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("perfil")
+@RequestMapping("perfis")
 public class PerfilControle {
 
     private final PerfilServico perfilServico;
@@ -32,17 +32,16 @@ public class PerfilControle {
     }
 
     @DeleteMapping
+<<<<<<< HEAD
     @ApiOperation("Exclusão de perfil do cliente")
     public ResponseEntity<DeletarPerfilDTO> adicionarPerfil (@RequestBody @Valid DeletarPerfilDTO deletarPefil){
+=======
+    public ResponseEntity<DeletarPerfilDTO> deletarPerfil (@RequestBody @Valid DeletarPerfilDTO deletarPefil){
+>>>>>>> 9a9138dbca151b7ea0b75aa5cd3c64d9cd6c64b6
         Boolean deletou = perfilServico.deletarPerfil(deletarPefil);
         if(deletou){
             return ResponseEntity.ok().body(deletarPefil);
         }
         return ResponseEntity.badRequest().body(deletarPefil);
     }
-
-
-
-
-
 }

@@ -1,14 +1,21 @@
-package br.com.panacademy.bluebank.modelo;
+package br.com.panacademy.bluebank.modelo.usuario;
 
+import br.com.panacademy.bluebank.modelo.Perfil;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "tb_cliente")
-public class Cliente implements UserDetails {
+@Table(name = "tb_usuario")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipoUsuario", length = 1, discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("U")
+public class Usuario implements UserDetails{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,17 +26,20 @@ public class Cliente implements UserDetails {
     private String email;
     private String senha;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "tb_cliente_perfil",
-    joinColumns = @JoinColumn(name = "tb_cliente_id"), inverseJoinColumns = @JoinColumn(name = "tb_perfil_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tb_usuario_perfil",
+            joinColumns = @JoinColumn(name = "tb_usuario_id"), inverseJoinColumns = @JoinColumn(name = "tb_perfil_id"))
     private Set<Perfil> perfis = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "conta_id", referencedColumnName = "conta_id")
-    private Conta conta;
-
-    public Cliente() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.perfis;
     }
+
+    public Set<Perfil> getPerfis() {
+        return perfis;
+    }
+
     public Long getId() {
         return id;
     }
@@ -86,25 +96,12 @@ public class Cliente implements UserDetails {
         this.senha = senha;
     }
 
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-
-    public Set<Perfil> getPerfis() {
-        return perfis;
-    }
-
     public void adicionarPefil (Perfil tipoPerfil){
         perfis.add(tipoPerfil);
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.perfis;
+    public void removerPerfil (Perfil tipoPerfil){
+        perfis.remove(tipoPerfil);
     }
 
     @Override
@@ -137,3 +134,4 @@ public class Cliente implements UserDetails {
         return true;
     }
 }
+

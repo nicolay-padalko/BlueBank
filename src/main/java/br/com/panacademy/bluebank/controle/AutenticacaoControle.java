@@ -26,6 +26,7 @@ public class AutenticacaoControle {
         this.authenticationManager = authenticationManager;
         this.tokenServico = tokenServico;
     }
+
     @PostMapping
     public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginDTO login){
         UsernamePasswordAuthenticationToken dadosLogin =

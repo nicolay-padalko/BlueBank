@@ -1,8 +1,8 @@
-package br.com.panacademy.bluebank.dto.cliente;
+package br.com.panacademy.bluebank.dto.usuario.funcionario;
 
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.usuario.Funcionario;
 
-public class ClienteDTO {
+public class FuncionarioDTO {
 
     private Long id;
     private String nome;
@@ -10,32 +10,26 @@ public class ClienteDTO {
     private String telefone;
     private String cpf;
     private String email;
-    private Long numeroConta;
-    private Double saldo;
 
-    public ClienteDTO() {
+    public FuncionarioDTO() {
     }
 
-    public ClienteDTO(Long id, String nome, String sobrenome, String telefone, String cpf, String email, Long numeroConta, Double saldo) {
+    public FuncionarioDTO(Long id, String nome, String sobrenome, String telefone, String cpf, String email) {
         this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.telefone = telefone;
         this.cpf = cpf;
         this.email = email;
-        this.numeroConta = numeroConta;
-        this.saldo = saldo;
     }
 
-    public ClienteDTO(Cliente entidade) {
+    public FuncionarioDTO(Funcionario entidade) {
         this.id = entidade.getId();
         this.nome = entidade.getNome();
         this.sobrenome = entidade.getSobrenome();
         this.telefone = entidade.getTelefone();
         this.cpf = entidade.getCpf();
         this.email = entidade.getEmail();
-        this.numeroConta = entidade.getConta().getContaId();
-        this.saldo = entidade.getConta().getSaldo();
     }
 
     public Long getId() {
@@ -86,19 +80,4 @@ public class ClienteDTO {
         this.email = email;
     }
 
-    public Long getNumeroConta() {
-        return numeroConta;
-    }
-
-    public void setNumeroConta(Long numeroConta) {
-        this.numeroConta = numeroConta;
-    }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
 }

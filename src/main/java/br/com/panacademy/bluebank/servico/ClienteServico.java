@@ -1,15 +1,18 @@
 package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
-import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
-import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
-import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
+import br.com.panacademy.bluebank.dto.usuario.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
-import br.com.panacademy.bluebank.modelo.Cliente;
+import br.com.panacademy.bluebank.modelo.Perfil;
+import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
+import br.com.panacademy.bluebank.modelo.usuario.Usuario;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
 import br.com.panacademy.bluebank.repositorio.PerfilRespositorio;
+import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,11 +28,13 @@ public class ClienteServico {
     private final ClienteRepositorio clienteRepositorio;
     private final ContaRepositorio contaRepositorio;
     private final PerfilRespositorio perfilRespositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
-    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio) {
+    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio, UsuarioRepositorio usuarioRepositorio) {
         this.clienteRepositorio = clienteRepositorio;
         this.contaRepositorio = contaRepositorio;
         this.perfilRespositorio = perfilRespositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Transactional(readOnly = true)
@@ -41,19 +46,19 @@ public class ClienteServico {
     @Transactional(readOnly = true)
     public ClienteDTO filtrarPorId(Long id) {
         Cliente cliente = clienteRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: "+id));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + id));
         return new ClienteDTO(cliente);
     }
 
     @Transactional(readOnly = true)
-    Cliente filtrarClientePorContaId(Long contaId){
+    Cliente filtrarClientePorContaId(Long contaId) {
         return clienteRepositorio.findByClienteByContaId(contaId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de conta id: "+ contaId +" não encontrado."));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de conta id: " + contaId + " não encontrado."));
     }
 
     @Transactional
     public ClienteDTO salvarCliente(Cliente cliente) {
-        if(cliente.getConta() == null){
+        if (cliente.getConta() == null) {
             Conta conta = new Conta();
             conta.setSaldo(0.0);
             Conta contaSalva = contaRepositorio.save(conta);
@@ -106,7 +111,6 @@ public class ClienteServico {
         return new AtualizarCredenciaisClienteDTO(entidade);
     }
 
-
     @Transactional
     public AtualizarClienteDTO atualizarCliente(Long id, AtualizarClienteDTO dto) {
         Cliente entidade = clienteRepositorio.findById(id)
@@ -116,5 +120,25 @@ public class ClienteServico {
 
         entidade = clienteRepositorio.save(entidade);
         return new AtualizarClienteDTO(entidade);
+    }
+
+    public String identificaTipoPorId(Long idUsuario) {
+        Usuario entidade = usuarioRepositorio.findById(idUsuario)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario não encontrado: " + idUsuario));
+
+        for (Perfil t : entidade.getPerfis()) {
+            if (t.getNome().equals("ROLE_ADMIN")) {
+                return "ADMIN";
+            }
+        }
+        for (Perfil t : entidade.getPerfis()) {
+            if (t.getNome().equals("ROLE_CLIENTE")) {
+                return "CLIENTE";
+            }
+        }
+        if (entidade.getPerfis() == null | entidade.getPerfis().isEmpty()) {
+            throw new RecursoNaoEncontradoException("PERFIL INVALIDO");
+        }
+        return null;
     }
 }
