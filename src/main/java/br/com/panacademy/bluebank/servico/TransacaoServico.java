@@ -10,12 +10,13 @@ import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.PublishRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -23,20 +24,25 @@ public class TransacaoServico {
 
     private final TransacaoRepositorio transacaoRepositorio;
     private final ClienteServico clienteServico;
+//    private final AmazonSNSClient snsClient;
 
-    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico) {
+//    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:blue-bank-squad-2";
+
+    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico/**, AmazonSNSClient snsClient**/) {
         this.transacaoRepositorio = transacaoRepositorio;
         this.clienteServico = clienteServico;
+//        this.snsClient = snsClient;
     }
 
     @Transactional
     public DepositarDTO depositar(Long contaId, DepositarDTO depositar) {
         Cliente cliente = clienteServico.filtrarClientePorContaId(contaId);
         cliente.getConta().setSaldo(retornoSaldoDeposito(cliente, depositar));
+
         List<Cliente> listaCliente = new ArrayList<>();
         listaCliente.add(cliente);
-        return operacao(depositar, listaCliente, TipoTransacao.DEPOSITO);
 
+        return operacao(depositar, listaCliente, TipoTransacao.DEPOSITO);
     }
 
     @Transactional
@@ -57,14 +63,10 @@ public class TransacaoServico {
 
         List<Cliente> lista = new ArrayList<>();
 
-        try {
-            clienteOrigem.getConta().setSaldo(retornoSaldoSaque(clienteOrigem, new SacarDTO(transferir)));
-            clienteDestino.getConta().setSaldo(retornoSaldoDeposito(clienteDestino, new DepositarDTO(transferir)));
-            lista.add(clienteOrigem);
-            lista.add(clienteDestino);
-        } catch (RecursoNaoEncontradoException | SaldoInsuficienteException e){
-            System.out.println("TESTANDO");
-        }
+        clienteOrigem.getConta().setSaldo(retornoSaldoSaque(clienteOrigem, new SacarDTO(transferir)));
+        clienteDestino.getConta().setSaldo(retornoSaldoDeposito(clienteDestino, new DepositarDTO(transferir)));
+        lista.add(clienteOrigem);
+        lista.add(clienteDestino);
 
         return operacao(transferir, lista, TipoTransacao.TRANSFERENCIA);
     }
@@ -87,6 +89,9 @@ public class TransacaoServico {
 
         cliente.forEach(c -> c .getConta().getTransacoes().add(transacaoRepositorio.save(transacao)));
         cliente.forEach(clienteServico::salvarCliente);
+
+//        PublishRequest publishRequest = new PublishRequest(TOPIC_ARN, buildEmailBody(), "Notification: Network connectivity issue");
+//        snsClient.publish(publishRequest);
 
         return operacao;
     }
@@ -113,4 +118,11 @@ public class TransacaoServico {
         return transferir;
 
     }
+
+//    private String buildEmailBody(){
+//        return "nothing";
+//
+//    }
+
+
 }

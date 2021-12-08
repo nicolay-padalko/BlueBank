@@ -2,14 +2,17 @@ package br.com.panacademy.bluebank.servico;
 
 import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
+import br.com.panacademy.bluebank.repositorio.PerfilRespositorio;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +24,12 @@ public class ClienteServico {
 
     private final ClienteRepositorio clienteRepositorio;
     private final ContaRepositorio contaRepositorio;
+    private final PerfilRespositorio perfilRespositorio;
 
-    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio) {
+    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio) {
         this.clienteRepositorio = clienteRepositorio;
         this.contaRepositorio = contaRepositorio;
+        this.perfilRespositorio = perfilRespositorio;
     }
 
     @Transactional(readOnly = true)
@@ -60,6 +65,26 @@ public class ClienteServico {
 
         clienteRepositorio.save(cliente);
         return new ClienteDTO(cliente);
+    }
+
+    @Transactional
+    public ClienteDTO salvarCliente(CadastrarClienteDTO cliente) {
+
+        Conta conta = new Conta();
+        conta.setSaldo(0.0);
+        Conta contaSalva = contaRepositorio.save(conta);
+        cliente.setConta(contaSalva);
+
+        String senhaEncriptografada = new BCryptPasswordEncoder().encode(cliente.getSenha());
+        cliente.setSenha(senhaEncriptografada);
+
+        ClienteDTO clienteDTO = new ClienteDTO();
+        BeanUtils.copyProperties(cliente, clienteDTO);
+
+        Cliente cliente1 = cliente.toCliente();
+        cliente1.adicionarPefil(perfilRespositorio.findById(2L).get());
+        clienteRepositorio.save(cliente1);
+        return new ClienteDTO(cliente1);
     }
 
     public void deletarCliente(Long id) {

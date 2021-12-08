@@ -1,16 +1,18 @@
 package br.com.panacademy.bluebank.controle;
 
+import br.com.panacademy.bluebank.config.aws.AWSSNSConfig;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.AtualizarCredenciaisClienteDTO;
+import br.com.panacademy.bluebank.dto.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.cliente.ClienteDTO;
-import br.com.panacademy.bluebank.modelo.Cliente;
 import br.com.panacademy.bluebank.servico.ClienteServico;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.SubscribeRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -19,11 +21,14 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteControle {
 
-
     private final ClienteServico clienteServico;
+    private final AmazonSNSClient snsClient;
 
-    public ClienteControle(ClienteServico clienteServico) {
+    String TOPIC_ARN = "CRIAR E COLOCAR";
+
+    public ClienteControle(ClienteServico clienteServico, AWSSNSConfig snsClient, AmazonSNSClient snsClient1) {
         this.clienteServico = clienteServico;
+        this.snsClient = snsClient1;
     }
 
 
@@ -43,7 +48,7 @@ public class ClienteControle {
 
     @PostMapping
     @ApiOperation("Cadastra um cliente, com atribuição dinâmica de ID")
-    public ResponseEntity<ClienteDTO> salvarCliente(@RequestBody Cliente cliente){
+    public ResponseEntity<ClienteDTO> salvarCliente(@Valid @RequestBody CadastrarClienteDTO cliente){
         ClienteDTO clienteDTO = clienteServico.salvarCliente(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
                 .buildAndExpand(clienteDTO.getId()).toUri();
@@ -69,6 +74,12 @@ public class ClienteControle {
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @PostMapping("/cadastrarEmail/{email}")
+    public void subscreverCliente(@PathVariable("email") String email){
+        SubscribeRequest request = new SubscribeRequest(TOPIC_ARN, "email", email);
+        snsClient.subscribe(request);
     }
 
 }

@@ -2,9 +2,10 @@ package br.com.panacademy.bluebank.modelo;
 
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.List;
 public class Conta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "gerador")
-    @SequenceGenerator(name="gerador", sequenceName="db_conta_gerador", initialValue = 50000, allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "gerador")
+    @SequenceGenerator(name="gerador", sequenceName="db_conta_gerador", initialValue = 5004, allocationSize = 10)
     @Column(name = "conta_id")
     private Long contaId;
 
@@ -27,7 +28,8 @@ public class Conta {
     @CreationTimestamp
     private LocalDateTime criadoEm;
 
-    @OneToMany(mappedBy = "conta", fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "conta")
     private List<Transacao> transacoes = new ArrayList<>();
 
     public Conta() {

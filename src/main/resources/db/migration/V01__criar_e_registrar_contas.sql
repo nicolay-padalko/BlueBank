@@ -4,7 +4,7 @@ CREATE TABLE tb_conta(
     criado_em TIMESTAMP NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (50001, 0.0, now());
-INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (50002, 44.0, now());
-INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (50003, 434.5, now());
+INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (5001, 0.0, now());
+INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (5002, 44.0, now());
+INSERT INTO tb_conta (conta_id, saldo, criado_em) VALUES (5003, 434.5, now());
 
