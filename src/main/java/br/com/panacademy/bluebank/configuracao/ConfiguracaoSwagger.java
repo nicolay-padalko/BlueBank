@@ -1,15 +1,17 @@
 package br.com.panacademy.bluebank.configuracao;
 
+import io.swagger.models.auth.In;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -32,7 +34,9 @@ public class ConfiguracaoSwagger {
                     .globalResponseMessage(RequestMethod.POST, responseMessage())
                     .globalResponseMessage(RequestMethod.PUT, responseMessage())
                     .globalResponseMessage(RequestMethod.DELETE, responseMessage())
-                    .apiInfo(apiInfo());
+                    .apiInfo(apiInfo())
+                    .securitySchemes(List.of(new ApiKey("Token Acces", HttpHeaders.AUTHORIZATION, In.HEADER.name())))
+                    .securityContexts(List.of(securityContext()));
     }
 
     private List<ResponseMessage> responseMessage()
@@ -58,4 +62,21 @@ public class ConfiguracaoSwagger {
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .build();
     }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+            .securityReferences(defaultAuth())
+            .forPaths(PathSelectors.ant("/auth/**"))
+            .build();
+    }
+
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope
+                = new AuthorizationScope("ADMIN", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return List.of(
+                new SecurityReference("Token Access", authorizationScopes));
+    }
+
 }
