@@ -11,6 +11,14 @@ Todas estas requisições são realizadas diretamente ao backend construido em J
 * [**Java 11+**](https://jdk.java.net/15/)
 * [**Mysql 8+**](https://dev.mysql.com/downloads/)
 
+
+
+**Para clonar a aplicação:**
+
+```bash
+git clone https://github.com/nicolay-padalko/BlueBank.git
+```
+
 ## Equipe
 * René Bastos - rsbastos
 * Nicolay Padalko - nicolay-padalko
