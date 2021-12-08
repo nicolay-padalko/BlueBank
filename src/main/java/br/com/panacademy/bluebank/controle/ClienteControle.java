@@ -81,5 +81,4 @@ public class ClienteControle {
         SubscribeRequest request = new SubscribeRequest(TOPIC_ARN, "email", email);
         snsClient.subscribe(request);
     }
-
 }

@@ -41,11 +41,11 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/clientes").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.GET,"/clientes/*").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.GET,"/clientes").permitAll()
+                .antMatchers(HttpMethod.GET,"/clientes/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers("/perfil").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, clienteRepositorio), UsernamePasswordAuthenticationFilter.class);

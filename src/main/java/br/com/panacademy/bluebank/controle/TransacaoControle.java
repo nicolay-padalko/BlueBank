@@ -6,6 +6,8 @@ import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -34,6 +36,9 @@ public class TransacaoControle {
 
     @PostMapping(value = "sacar/{contaId}")
     @ApiOperation("Saque da conta do cliente, filtrado por ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<SacarDTO> sacar(@PathVariable("contaId") Long id, @RequestBody SacarDTO dto){
         dto = transacaoServico.sacar(id, dto);
         return ResponseEntity.ok(dto);
@@ -41,6 +46,9 @@ public class TransacaoControle {
 
     @PostMapping(value = "transferir/{contaIdOrigem}/{contaIdDestino}")
     @ApiOperation("Transferência entre clientes do banco")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<TransferirDTO> transferir(@PathVariable("contaIdOrigem") Long idOrigem,
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody TransferirDTO dto){
