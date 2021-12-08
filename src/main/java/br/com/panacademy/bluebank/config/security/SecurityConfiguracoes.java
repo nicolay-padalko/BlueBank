@@ -3,6 +3,7 @@ package br.com.panacademy.bluebank.config.security;
 import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,12 +41,33 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/clientes").hasRole("CLIENTE")
-                .antMatchers("/clientes").permitAll()
-                .antMatchers("/clientes").permitAll()
-                .antMatchers("/clientes").permitAll()
-                .antMatchers("/clientes").permitAll()
-                .antMatchers("/clientes").permitAll()
+                .antMatchers(HttpMethod.POST,"/auth").permitAll()
+                .antMatchers(HttpMethod.GET,"/clientes").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/clientes").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/clientes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.PUT,"/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/clientes/credenciais/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/contas").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/contas/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/contas/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/funcionarios").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/funcionarios").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/funcionarios/credenciais/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/funcionarios/cadastrarEmail/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/perfis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/perfis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/transacoes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/depositar").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/depositar/*").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/sacar").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/transferir/*").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST,"/sacar/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/transferir/*/*").hasRole("ADMIN")
                 .anyRequest().denyAll()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
