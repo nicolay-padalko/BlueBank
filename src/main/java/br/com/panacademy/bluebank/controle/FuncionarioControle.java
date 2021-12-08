@@ -26,7 +26,7 @@ public class FuncionarioControle {
     private final FuncionarioServico funcionarioServico;
     private final AmazonSNSClient snsClient;
 
-    String TOPIC_ARN = "CRIAR E COLOCAR";
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:PanCodersSNSTopic";
 
     public FuncionarioControle(FuncionarioServico funcionarioServico, AmazonSNSClient snsClient) {
         this.funcionarioServico = funcionarioServico;

@@ -61,10 +61,9 @@ public class FuncionarioServico {
         Funcionario funcionario1 = funcionario.toFuncionario();
         funcionario1.adicionarPefil(perfilRespositorio.findById(2L).get());
         funcionario1.adicionarPefil(perfilRespositorio.findById(1L).get());
-        funcionario1.adicionarPefil(new Perfil("ROLE_CLIENTE"));
-        funcionario1.adicionarPefil(new Perfil("ROLE_ADMIN"));
         funcionarioRepositorio.save(funcionario1);
-        PublishRequest publishRequest = new PublishRequest(TOPIC_ARN, buildEmailBody(funcionarioDTO), "Notification: Network connectivity issue");
+        PublishRequest publishRequest =
+                new PublishRequest(TOPIC_ARN, buildEmailBody(funcionarioDTO), "Notification: Cadastro de funcionario");
         snsClient.publish(publishRequest);
         return new FuncionarioDTO(funcionario1);
     }
