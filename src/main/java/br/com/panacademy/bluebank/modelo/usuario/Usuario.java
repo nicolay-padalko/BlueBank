@@ -36,6 +36,10 @@ public class Usuario implements UserDetails{
         return this.perfis;
     }
 
+    public Set<Perfil> getPerfis() {
+        return perfis;
+    }
+
     public Long getId() {
         return id;
     }

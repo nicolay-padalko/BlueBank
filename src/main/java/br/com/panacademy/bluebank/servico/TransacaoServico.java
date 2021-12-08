@@ -9,6 +9,7 @@ import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class TransacaoServico {
 
     @Transactional
     public DepositarDTO depositar(Long contaId, DepositarDTO depositar) {
+
         Cliente cliente = clienteServico.filtrarClientePorContaId(contaId);
         cliente.getConta().setSaldo(retornoSaldoDeposito(cliente, depositar));
 
@@ -116,10 +118,14 @@ public class TransacaoServico {
 
     }
 
+    public List<Transacao> listarTodosDoUsuario(Long idContaUsuario) {
+        List<Transacao> transferir = transacaoRepositorio.findAllByContaUsuario(idContaUsuario);
+        return transferir;
+    }
+
 //    private String buildEmailBody(){
 //        return "nothing";
 //
 //    }
-
 
 }

@@ -27,7 +27,7 @@ public class ContaControle {
         return ResponseEntity.ok(listaContaDTO);
     }
 
-    @GetMapping(value = "/{id}") // GET /contas/{id}
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ContaDTO> filtrarContaPorId(@PathVariable Long id) {
         ContaDTO conta = contaServico.filtrarContaPorId(id);
         return ResponseEntity.ok(conta);

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("perfil")
+@RequestMapping("perfis")
 public class PerfilControle {
 
     private final PerfilServico perfilServico;

@@ -19,3 +19,9 @@ CREATE TABLE tb_usuario_perfil(
         FOREIGN KEY (tb_perfil_id)
             REFERENCES tb_perfil(perfil_id)
 ) ENGINE = InnoDB;
+
+INSERT INTO tb_usuario_perfil (tb_usuario_id, tb_perfil_id) VALUES (1,2);
+INSERT INTO tb_usuario_perfil (tb_usuario_id, tb_perfil_id) VALUES (2,2);
+INSERT INTO tb_usuario_perfil (tb_usuario_id, tb_perfil_id) VALUES (3,2);
+INSERT INTO tb_usuario_perfil (tb_usuario_id, tb_perfil_id) VALUES (4,1);
+INSERT INTO tb_usuario_perfil (tb_usuario_id, tb_perfil_id) VALUES (4,2);

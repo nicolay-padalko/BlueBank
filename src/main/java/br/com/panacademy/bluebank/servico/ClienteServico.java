@@ -8,9 +8,11 @@ import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Perfil;
 import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
+import br.com.panacademy.bluebank.modelo.usuario.Usuario;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
 import br.com.panacademy.bluebank.repositorio.PerfilRespositorio;
+import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,11 +28,13 @@ public class ClienteServico {
     private final ClienteRepositorio clienteRepositorio;
     private final ContaRepositorio contaRepositorio;
     private final PerfilRespositorio perfilRespositorio;
+    private final UsuarioRepositorio usuarioRepositorio;
 
-    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio) {
+    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio, UsuarioRepositorio usuarioRepositorio) {
         this.clienteRepositorio = clienteRepositorio;
         this.contaRepositorio = contaRepositorio;
         this.perfilRespositorio = perfilRespositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Transactional(readOnly = true)
@@ -117,5 +121,25 @@ public class ClienteServico {
 
         entidade = clienteRepositorio.save(entidade);
         return new AtualizarClienteDTO(entidade);
+    }
+
+    public String identificaTipoPorId(Long idUsuario) {
+        Usuario entidade = usuarioRepositorio.findById(idUsuario)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario não encontrado: " + idUsuario));
+
+        for (Perfil t : entidade.getPerfis()){
+            if (t.getNome().equals("ROLE_ADMIN")) {
+                return "ADMIN";
+            }
+        }
+        for (Perfil t : entidade.getPerfis()){
+            if (t.getNome().equals("ROLE_CLIENTE")) {
+                return "CLIENTE";
+            }
+        }
+        if(entidade.getPerfis() == null | entidade.getPerfis().isEmpty()){
+            throw new RecursoNaoEncontradoException("PERFIL INVALIDO");
+        }
+        return null;
     }
 }

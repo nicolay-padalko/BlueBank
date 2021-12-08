@@ -12,6 +12,7 @@ public interface ClienteRepositorio extends JpaRepository<Cliente, Long> {
 
     @Query("SELECT c FROM Cliente c WHERE c.conta.contaId = :contaId")
     Optional<Cliente> findByClienteByContaId(Long contaId);
+
 }
 
 

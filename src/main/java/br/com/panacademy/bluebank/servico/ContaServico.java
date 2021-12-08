@@ -40,6 +40,12 @@ public class ContaServico {
                 orElseThrow(() -> new RecursoNaoEncontradoException("Conta não encontrado: "+id));
         return new ContaDTO(conta);
     }
+
+    public Conta filtrarContaPorIdUsuario(Long id) {
+        Conta conta = contaRepositorio.findByIdUsuario(id).
+                orElseThrow(() -> new RecursoNaoEncontradoException("Conta não encontrada"));
+        return conta;
+    }
 }
 
 

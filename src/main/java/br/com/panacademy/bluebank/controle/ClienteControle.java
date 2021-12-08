@@ -21,15 +21,12 @@ import java.util.List;
 public class ClienteControle {
 
     private final ClienteServico clienteServico;
-    private final AmazonSNSClient snsClient;
 
     String TOPIC_ARN = "CRIAR E COLOCAR";
 
-    public ClienteControle(ClienteServico clienteServico, AWSSNSConfig snsClient, AmazonSNSClient snsClient1) {
+    public ClienteControle(ClienteServico clienteServico, AmazonSNSClient snsClient1) {
         this.clienteServico = clienteServico;
-        this.snsClient = snsClient1;
     }
-
 
     @GetMapping
     public ResponseEntity<List<ClienteDTO>> listarTodosClientes(){
@@ -51,8 +48,8 @@ public class ClienteControle {
         return ResponseEntity.created(uri).body(clienteDTO);
     }
 
-    @DeleteMapping(value = "/{id}") //mapear a url
-    public ResponseEntity<Void> deletar(@PathVariable Long id) { //recebendo os dados para deletar
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteServico.deletarCliente(id);
         return ResponseEntity.noContent().build();
     }
@@ -67,12 +64,6 @@ public class ClienteControle {
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);
-    }
-
-    @PostMapping("/cadastrarEmail/{email}")
-    public void subscreverCliente(@PathVariable("email") String email){
-        SubscribeRequest request = new SubscribeRequest(TOPIC_ARN, "email", email);
-        snsClient.subscribe(request);
     }
 
 }
