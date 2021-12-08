@@ -12,4 +12,5 @@ public interface ContaRepositorio extends JpaRepository<Conta, Long> {
 
     @Query("SELECT c.conta FROM Cliente c WHERE c.id = :id")
     Optional<Conta> findByIdUsuario(Long id);
+
 }

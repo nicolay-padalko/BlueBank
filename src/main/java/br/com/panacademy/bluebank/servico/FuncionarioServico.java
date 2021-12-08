@@ -1,20 +1,16 @@
 package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarClienteDTO;
-import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClienteDTO;
-import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
-import br.com.panacademy.bluebank.dto.usuario.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.funcionario.AtualizarCredenciaisFuncionarioDTO;
 import br.com.panacademy.bluebank.dto.usuario.funcionario.AtualizarFuncionarioDTO;
 import br.com.panacademy.bluebank.dto.usuario.funcionario.CadastrarFuncionarioDTO;
 import br.com.panacademy.bluebank.dto.usuario.funcionario.FuncionarioDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Perfil;
-import br.com.panacademy.bluebank.modelo.usuario.Cliente;
-import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.usuario.Funcionario;
 import br.com.panacademy.bluebank.repositorio.FuncionarioRepositorio;
 import br.com.panacademy.bluebank.repositorio.PerfilRespositorio;
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.PublishRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,10 +25,14 @@ public class FuncionarioServico {
 
     private final FuncionarioRepositorio funcionarioRepositorio;
     private final PerfilRespositorio perfilRespositorio;
+    private final AmazonSNSClient snsClient;
 
-    public FuncionarioServico(FuncionarioRepositorio funcionarioRepositorio, PerfilRespositorio perfilRespositorio) {
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:PanCodersSNSTopic";
+
+    public FuncionarioServico(FuncionarioRepositorio funcionarioRepositorio, PerfilRespositorio perfilRespositorio, AmazonSNSClient snsClient) {
         this.funcionarioRepositorio = funcionarioRepositorio;
         this.perfilRespositorio = perfilRespositorio;
+        this.snsClient = snsClient;
     }
 
 
@@ -45,17 +45,7 @@ public class FuncionarioServico {
     @Transactional(readOnly = true)
     public FuncionarioDTO filtrarPorId(Long id) {
         Funcionario funcionario = funcionarioRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Funcionario não encontrado: "+id));
-        return new FuncionarioDTO(funcionario);
-    }
-
-    @Transactional
-    public FuncionarioDTO salvarFuncionario(Funcionario funcionario) {
-
-        FuncionarioDTO funcionarioDTO = new FuncionarioDTO();
-        BeanUtils.copyProperties(funcionario, funcionarioDTO);
-
-        funcionarioRepositorio.save(funcionario);
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Funcionario não encontrado: " + id));
         return new FuncionarioDTO(funcionario);
     }
 
@@ -74,6 +64,8 @@ public class FuncionarioServico {
         funcionario1.adicionarPefil(new Perfil("ROLE_CLIENTE"));
         funcionario1.adicionarPefil(new Perfil("ROLE_ADMIN"));
         funcionarioRepositorio.save(funcionario1);
+        PublishRequest publishRequest = new PublishRequest(TOPIC_ARN, buildEmailBody(funcionarioDTO), "Notification: Network connectivity issue");
+        snsClient.publish(publishRequest);
         return new FuncionarioDTO(funcionario1);
     }
 
@@ -107,4 +99,15 @@ public class FuncionarioServico {
         entidade = funcionarioRepositorio.save(entidade);
         return new AtualizarFuncionarioDTO(entidade);
     }
+
+    private String buildEmailBody(FuncionarioDTO funcionario) {
+        return "Novo cadastro: " +
+                "\nUsuario: " + funcionario.getEmail() +
+                "\nNome: " + funcionario.getNome() +
+                "\nSobrenome: " + funcionario.getSobrenome() +
+                "\nCPF: " + funcionario.getCpf() +
+                "\nTelefone: " + funcionario.getTelefone();
+
+    }
+
 }

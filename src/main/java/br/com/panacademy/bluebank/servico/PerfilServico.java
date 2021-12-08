@@ -27,7 +27,7 @@ public class PerfilServico {
         String nomeRole = "ROLE_" + cadastrarPefil.getNome();
         Optional<Perfil> byNome = perfilRespositorio.findByNome(nomeRole);
         if(byNome.isPresent()) {
-            throw new RecursoNaoEncontradoException("Perfil ja cadastrado em sistema: " + nomeRole);
+            throw new IllegalArgumentException("Perfil ja cadastrado em sistema: " + nomeRole);
         }
         perfilRespositorio.save(new Perfil(nomeRole));
         return true;

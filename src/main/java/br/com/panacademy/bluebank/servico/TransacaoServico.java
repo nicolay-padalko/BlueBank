@@ -22,14 +22,11 @@ public class TransacaoServico {
 
     private final TransacaoRepositorio transacaoRepositorio;
     private final ClienteServico clienteServico;
-//    private final AmazonSNSClient snsClient;
 
-//    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:blue-bank-squad-2";
-
-    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico/**, AmazonSNSClient snsClient**/) {
+    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico) {
         this.transacaoRepositorio = transacaoRepositorio;
         this.clienteServico = clienteServico;
-//        this.snsClient = snsClient;
+
     }
 
     @Transactional
@@ -89,9 +86,6 @@ public class TransacaoServico {
         cliente.forEach(c -> c .getConta().getTransacoes().add(transacaoRepositorio.save(transacao)));
         cliente.forEach(clienteServico::salvarCliente);
 
-//        PublishRequest publishRequest = new PublishRequest(TOPIC_ARN, buildEmailBody(), "Notification: Network connectivity issue");
-//        snsClient.publish(publishRequest);
-
         return operacao;
     }
 
@@ -122,10 +116,5 @@ public class TransacaoServico {
         List<Transacao> transferir = transacaoRepositorio.findAllByContaUsuario(idContaUsuario);
         return transferir;
     }
-
-//    private String buildEmailBody(){
-//        return "nothing";
-//
-//    }
 
 }

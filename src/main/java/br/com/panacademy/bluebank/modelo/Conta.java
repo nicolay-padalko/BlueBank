@@ -29,7 +29,7 @@ public class Conta {
     private LocalDateTime criadoEm;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy = "conta")
+    @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
     private List<Transacao> transacoes = new ArrayList<>();
 
     public Conta() {

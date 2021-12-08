@@ -46,19 +46,19 @@ public class ClienteServico {
     @Transactional(readOnly = true)
     public ClienteDTO filtrarPorId(Long id) {
         Cliente cliente = clienteRepositorio.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: "+id));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + id));
         return new ClienteDTO(cliente);
     }
 
     @Transactional(readOnly = true)
-    Cliente filtrarClientePorContaId(Long contaId){
+    Cliente filtrarClientePorContaId(Long contaId) {
         return clienteRepositorio.findByClienteByContaId(contaId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de conta id: "+ contaId +" não encontrado."));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de conta id: " + contaId + " não encontrado."));
     }
 
     @Transactional
     public ClienteDTO salvarCliente(Cliente cliente) {
-        if(cliente.getConta() == null){
+        if (cliente.getConta() == null) {
             Conta conta = new Conta();
             conta.setSaldo(0.0);
             Conta contaSalva = contaRepositorio.save(conta);
@@ -111,7 +111,6 @@ public class ClienteServico {
         return new AtualizarCredenciaisClienteDTO(entidade);
     }
 
-
     @Transactional
     public AtualizarClienteDTO atualizarCliente(Long id, AtualizarClienteDTO dto) {
         Cliente entidade = clienteRepositorio.findById(id)
@@ -127,17 +126,17 @@ public class ClienteServico {
         Usuario entidade = usuarioRepositorio.findById(idUsuario)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Usuario não encontrado: " + idUsuario));
 
-        for (Perfil t : entidade.getPerfis()){
+        for (Perfil t : entidade.getPerfis()) {
             if (t.getNome().equals("ROLE_ADMIN")) {
                 return "ADMIN";
             }
         }
-        for (Perfil t : entidade.getPerfis()){
+        for (Perfil t : entidade.getPerfis()) {
             if (t.getNome().equals("ROLE_CLIENTE")) {
                 return "CLIENTE";
             }
         }
-        if(entidade.getPerfis() == null | entidade.getPerfis().isEmpty()){
+        if (entidade.getPerfis() == null | entidade.getPerfis().isEmpty()) {
             throw new RecursoNaoEncontradoException("PERFIL INVALIDO");
         }
         return null;

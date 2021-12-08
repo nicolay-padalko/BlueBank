@@ -26,7 +26,7 @@ public class Usuario implements UserDetails{
     private String email;
     private String senha;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tb_usuario_perfil",
             joinColumns = @JoinColumn(name = "tb_usuario_id"), inverseJoinColumns = @JoinColumn(name = "tb_perfil_id"))
     private Set<Perfil> perfis = new HashSet<>();
