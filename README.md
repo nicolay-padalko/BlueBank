@@ -46,16 +46,56 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 | --- | --- | --- |
 | <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /auth | Autenticação por Token |
 
-<H3>cliente-controle</h3>
+<H3>cliente-controle</H3>
 
 | MÉTODO | ENDPOINT | DESCRIÇÃO |
 | --- | --- | --- |
 | <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /clientes | Lista todos os clientes |
 | <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /clientes | Cadastra um cliente, com atribuição dinâmica de ID |
-| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /clientes/{id} | Busca e retorna um cliente, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /clientes | Atualiza um cliente |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /clientes/{id} | Lista um cliente, filtrando pelo ID |
 | <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /clientes/{id} | Atualização de telefone, email e senha do cliente, filtrando pelo ID |
-| <a><img src="https://img.shields.io/badge/-DELETE-red"></a> | /clientes/{id} | Busca e deleta um cliente, filtrando pelo ID |
-| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /clientes/cadastrarEmail/{email} | Cadastra o e-mail do cliente |
+| <a><img src="https://img.shields.io/badge/-DELETE-red"></a> | /clientes/{id} | Deleta um cliente, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /clientes/credenciais/{id} | Atualiza as credenciais do cliente, filtrando pelo ID |
+
+<H3>conta-controle</H3>
+
+| MÉTODO | ENDPOINT | DESCRIÇÃO |
+| --- | --- | --- |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /contas | Lista todas as contas |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /contas/{id} | Lista uma conta, filtrando pelo ID |
+
+<H3>funcionario-controle</H3>
+
+| MÉTODO | ENDPOINT | DESCRIÇÃO |
+| --- | --- | --- |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /funcionarios | Lista todos os funcionários |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /funcionarios | Cadastra um funcionário |
+| <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /funcionarios | Atualiza os dados de um funcionário |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /funcionarios/{id} | Lista um funcionário, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /funcionarios{id} | Atualiza os dados de um funcionário, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-DELETE-red"></a> | /funcionarios/{id} | Deleta o cadastro de um funcionário |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /funcionarios/cadastrarEmail/{email} | Confirma o cadastro de um funcionário, com aviso por e-mail |
+| <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /funcionarios/credenciais/{id} | Atualiza as credenciais de um funcionário |
+
+<H3>perfil-controle</H3>
+    
+| MÉTODO | ENDPOINT | DESCRIÇÃO |
+| --- | --- | --- |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /perfis | Cadastro de perfil |
+| <a><img src="https://img.shields.io/badge/-DELETE-red"></a> | /perfis | Exclusão de perfil |
+    
+<H3>transacao-controle</H3>
+
+| MÉTODO | ENDPOINT | DESCRIÇÃO |
+| --- | --- | --- |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /transacoes | Lista todas as transacoes efetuadas |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/depositar | Efetua um depósito na conta do cliente |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/depositar/{contaId} | Efetua um depósito na conta do cliente, filtrado pelo ID |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/sacar | Efetua um saque da conta do cliente |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/sacar/{contaId} | Efetua um saque da conta do cliente, filtrado pelo ID |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/transferir/{contaIdDestino} | Efetua uma transferência para outro cliente do banco |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/transferir/{contaIdOrigem}/{contaIdDestino} | Transferência entre contas do banco, filtrada pelos ID´s ||
 
 
 - <h4>Extras:</h4>
