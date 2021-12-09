@@ -4,6 +4,7 @@ import br.com.panacademy.bluebank.config.security.TokenServico;
 import br.com.panacademy.bluebank.dto.LoginDTO;
 import br.com.panacademy.bluebank.dto.TokenDTO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,7 @@ public class AutenticacaoControle {
     }
 
     @PostMapping
+    @ApiOperation("Autenticação por Token")
     public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginDTO login){
         UsernamePasswordAuthenticationToken dadosLogin =
                 new UsernamePasswordAuthenticationToken(login.getEmail(), login.getSenha());

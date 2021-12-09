@@ -37,7 +37,7 @@ public class ClienteControle {
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("Busca e retorna um cliente, filtrando pelo ID")
+    @ApiOperation("Lista um cliente, filtrando pelo ID")
     public ResponseEntity<ClienteDTO> filtrarPorId(@PathVariable Long id) {
         ClienteDTO clienteDTO = clienteServico.filtrarPorId(id);
         return ResponseEntity.ok(clienteDTO);
@@ -53,13 +53,14 @@ public class ClienteControle {
     }
 
     @DeleteMapping(value = "/{id}")
-    @ApiOperation("Busca e deleta um cliente, filtrando pelo ID")
+    @ApiOperation("Deleta um cliente, filtrando pelo ID")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteServico.deletarCliente(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping()
+    @ApiOperation("Atualiza um cliente")
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(HttpServletRequest request, @RequestBody AtualizarClienteDTO dto) {
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);

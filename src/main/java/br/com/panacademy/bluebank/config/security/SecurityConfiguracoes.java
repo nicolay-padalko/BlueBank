@@ -67,7 +67,8 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/transacoes/depositar/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/transacoes/sacar/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/transacoes/transferir/*/*").hasRole("ADMIN")
-                .anyRequest().denyAll()
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AutenticacaoViaTokenFiltro(tokenServico, usuarioRepositorio), UsernamePasswordAuthenticationFilter.class);

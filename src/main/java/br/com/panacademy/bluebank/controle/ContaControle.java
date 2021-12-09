@@ -5,6 +5,7 @@ import br.com.panacademy.bluebank.dto.ContaDTO;
 import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import br.com.panacademy.bluebank.servico.ContaServico;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class ContaControle {
     }
 
     @GetMapping
+    @ApiOperation("Lista todas as contas")
     public ResponseEntity<List<ContaDTO>> listarTodasAsContas(HttpServletRequest request) {
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -44,6 +46,7 @@ public class ContaControle {
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation("Lista uma conta, filtrando pelo ID")
     public ResponseEntity<ContaDTO> filtrarContaPorId(@PathVariable Long id) {
         ContaDTO conta = contaServico.filtrarContaPorId(id);
         return ResponseEntity.ok(conta);

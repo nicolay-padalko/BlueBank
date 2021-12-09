@@ -22,7 +22,7 @@ public class PerfilControle {
 
 
     @PostMapping
-    @ApiOperation("Cadastro de perfil do cliente")
+    @ApiOperation("Cadastro de perfil")
     public ResponseEntity<CadastrarPefilDTO> adicionarPerfil (@RequestBody @Valid CadastrarPefilDTO cadastrarPefil){
         Boolean salvou = perfilServico.cadastrarPefil(cadastrarPefil);
         if(salvou){
@@ -32,7 +32,7 @@ public class PerfilControle {
     }
 
     @DeleteMapping
-    @ApiOperation("Exclusão de perfil do cliente")
+    @ApiOperation("Exclusão de perfil")
     public ResponseEntity<DeletarPerfilDTO> deletarPerfil (@RequestBody @Valid DeletarPerfilDTO deletarPefil){
         Boolean deletou = perfilServico.deletarPerfil(deletarPefil);
         if(deletou){

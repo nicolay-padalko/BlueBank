@@ -38,6 +38,7 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "depositar")
+    @ApiOperation("Efetua um depósito na conta do cliente")
     public ResponseEntity<DepositarDTO> depositar(HttpServletRequest request, @Valid @RequestBody DepositarDTO dto, BindingResult result){
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -47,6 +48,10 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "sacar")
+    @ApiOperation("Efetua um saque da conta do cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<SacarDTO> sacar(HttpServletRequest request, @RequestBody SacarDTO dto){
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -56,6 +61,10 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "transferir/{contaIdDestino}")
+    @ApiOperation("Efetua uma transferência para outro cliente do banco")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<TransferirDTO> transferir(HttpServletRequest request,
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody TransferirDTO dto){
@@ -69,14 +78,14 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "depositar/{contaId}")
-    @ApiOperation("Depósito na conta do cliente, filtrado por ID")
+    @ApiOperation("Efetua um depósito na conta do cliente, filtrado pelo ID")
     public ResponseEntity<DepositarDTO> depositar(@PathVariable("contaId") Long id, @Valid @RequestBody DepositarDTO dto, BindingResult result){
         dto = transacaoServico.depositar(id, dto);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping(value = "sacar/{contaId}")
-    @ApiOperation("Saque da conta do cliente, filtrado por ID")
+    @ApiOperation("Efetua um saque da conta do cliente, filtrado pelo ID")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
     })
@@ -86,7 +95,7 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "transferir/{contaIdOrigem}/{contaIdDestino}")
-    @ApiOperation("Transferência entre clientes do banco")
+    @ApiOperation("Transferência entre contas do banco, filtrada pelos ID´s")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
     })
