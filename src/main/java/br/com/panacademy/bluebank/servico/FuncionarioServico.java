@@ -27,7 +27,7 @@ public class FuncionarioServico {
     private final PerfilRespositorio perfilRespositorio;
     private final AmazonSNSClient snsClient;
 
-    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:PanCodersSNSTopic";
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:SQ02T2";
 
     public FuncionarioServico(FuncionarioRepositorio funcionarioRepositorio, PerfilRespositorio perfilRespositorio, AmazonSNSClient snsClient) {
         this.funcionarioRepositorio = funcionarioRepositorio;

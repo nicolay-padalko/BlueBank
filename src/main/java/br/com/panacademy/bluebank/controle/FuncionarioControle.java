@@ -9,7 +9,6 @@ import br.com.panacademy.bluebank.servico.FuncionarioServico;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.SubscribeRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,7 +25,7 @@ public class FuncionarioControle {
     private final AmazonSNSClient snsClient;
     private final TokenServico tokenServico;
 
-    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:PanCodersSNSTopic";
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:SQ02T2";
 
     public FuncionarioControle(FuncionarioServico funcionarioServico, AmazonSNSClient snsClient, TokenServico tokenServico) {
         this.funcionarioServico = funcionarioServico;
