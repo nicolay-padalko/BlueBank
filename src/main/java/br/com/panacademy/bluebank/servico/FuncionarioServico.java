@@ -83,6 +83,10 @@ public class FuncionarioServico {
 
         BeanUtils.copyProperties(dto, entidade);
 
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
+
         entidade = funcionarioRepositorio.save(entidade);
         return new AtualizarCredenciaisFuncionarioDTO(entidade);
     }
@@ -94,6 +98,10 @@ public class FuncionarioServico {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Funcionario não encontrado: " + id));
 
         BeanUtils.copyProperties(dto, entidade);
+
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
 
         entidade = funcionarioRepositorio.save(entidade);
         return new AtualizarFuncionarioDTO(entidade);
