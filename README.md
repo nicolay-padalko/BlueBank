@@ -37,6 +37,27 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
         - [X] Liste os endpoints no README.md
         - [X] O Banco deve ser entregue em script SQL junto ao repositório.
 
+
+## Listagem de Endpoints por Classes:
+
+<H3>autenticacao-controle</H3>
+
+| MÉTODO | ENDPOINT | DESCRIÇÃO |
+| --- | --- | --- |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /auth | Autenticação por Token |
+
+<H3>cliente-controle</h3>
+
+| MÉTODO | ENDPOINT | DESCRIÇÃO |
+| --- | --- | --- |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /clientes | Lista todos os clientes |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /clientes | Cadastra um cliente, com atribuição dinâmica de ID |
+| <a><img src="https://img.shields.io/badge/-GET-9cf"></a> | /clientes/{id} | Busca e retorna um cliente, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-PUT%20%20%20-orange"></a> | /clientes/{id} | Atualização de telefone, email e senha do cliente, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-DELETE-red"></a> | /clientes/{id} | Busca e deleta um cliente, filtrando pelo ID |
+| <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /clientes/cadastrarEmail/{email} | Cadastra o e-mail do cliente |
+
+
 - <h4>Extras:</h4>
 - 
 
