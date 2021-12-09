@@ -83,8 +83,12 @@ public class FuncionarioServico {
 
         BeanUtils.copyProperties(dto, entidade);
 
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
+
         entidade = funcionarioRepositorio.save(entidade);
-        return new AtualizarCredenciaisFuncionarioDTO(entidade);
+        return new AtualizarCredenciaisFuncionarioDTO(entidade, dto);
     }
 
 
@@ -95,8 +99,12 @@ public class FuncionarioServico {
 
         BeanUtils.copyProperties(dto, entidade);
 
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
+
         entidade = funcionarioRepositorio.save(entidade);
-        return new AtualizarFuncionarioDTO(entidade);
+        return new AtualizarFuncionarioDTO(entidade, dto);
     }
 
     private String buildEmailBody(FuncionarioDTO funcionario) {
@@ -108,5 +116,6 @@ public class FuncionarioServico {
                 "\nTelefone: " + funcionario.getTelefone();
 
     }
+
 
 }

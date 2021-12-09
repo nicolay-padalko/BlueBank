@@ -46,9 +46,9 @@ public class ContaControle {
         String tipo = identificaTipo(idUsuario);
         List<ContaDTO> listaContaDTO = new ArrayList<>();
 
-        if(tipo.equals("ADMIN")) {
+        if (tipo.equals("ADMIN")) {
             listaContaDTO = contaServico.listarTodas();
-        }else if(tipo.equals("CLIENTE")){
+        } else if (tipo.equals("CLIENTE")) {
             Conta conta = contaServico.filtrarContaPorIdUsuario(idUsuario);
             listaContaDTO.add(new ContaDTO(conta));
         }
@@ -66,6 +66,7 @@ public class ContaControle {
         return ResponseEntity.ok(conta);
     }
 
+<<<<<<< HEAD
     @DeleteMapping(value = "/{id}")
     @ApiOperation("Deleta uma conta, filtrando pelo ID")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
@@ -73,6 +74,8 @@ public class ContaControle {
         return ResponseEntity.noContent().build();
     }
 
+=======
+>>>>>>> 733f7374d41fe246681544ada05c9489d9fba0ba
     private String recuperarToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {

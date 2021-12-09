@@ -100,15 +100,20 @@ public class ClienteServico {
         }
     }
 
-    @Transactional
+    @Transactional()
     public AtualizarCredenciaisClienteDTO atualizarCredenciaisCliente(Long id, AtualizarCredenciaisClienteDTO dto) {
         Cliente entidade = clienteRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de id: " + id + " não encontrado"));
 
         BeanUtils.copyProperties(dto, entidade);
 
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
+
         entidade = clienteRepositorio.save(entidade);
-        return new AtualizarCredenciaisClienteDTO(entidade);
+
+        return new AtualizarCredenciaisClienteDTO(entidade, dto);
     }
 
     @Transactional
@@ -118,8 +123,13 @@ public class ClienteServico {
 
         BeanUtils.copyProperties(dto, entidade);
 
-        entidade = clienteRepositorio.save(entidade);
-        return new AtualizarClienteDTO(entidade);
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
+
+        clienteRepositorio.save(entidade);
+
+        return new AtualizarClienteDTO(entidade, dto);
     }
 
     public String identificaTipoPorId(Long idUsuario) {
