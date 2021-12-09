@@ -6,7 +6,6 @@ import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClient
 import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.servico.ClienteServico;
-import br.com.panacademy.bluebank.servico.ContaServico;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

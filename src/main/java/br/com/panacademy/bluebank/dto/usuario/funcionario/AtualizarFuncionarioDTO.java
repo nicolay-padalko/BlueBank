@@ -19,7 +19,7 @@ public class AtualizarFuncionarioDTO {
     }
 
     public AtualizarFuncionarioDTO(Funcionario entidade) {
-        this.telefone = entidade.getCpf();
+        this.telefone = entidade.getTelefone();
         this.email = entidade.getEmail();
         this.senha = entidade.getSenha();
     }

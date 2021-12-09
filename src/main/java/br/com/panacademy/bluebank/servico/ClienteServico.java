@@ -118,7 +118,14 @@ public class ClienteServico {
 
         BeanUtils.copyProperties(dto, entidade);
 
-        entidade = clienteRepositorio.save(entidade);
+        String senhaCodificada = new BCryptPasswordEncoder().encode(dto.getSenha());
+
+        entidade.setSenha(senhaCodificada);
+
+        clienteRepositorio.save(entidade);
+
+        entidade.setSenha(dto.getSenha());
+
         return new AtualizarClienteDTO(entidade);
     }
 

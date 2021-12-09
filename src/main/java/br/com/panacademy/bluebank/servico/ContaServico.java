@@ -28,13 +28,6 @@ public class ContaServico {
         return listaContas.stream().map(ContaDTO::new).collect(Collectors.toList());
     }
 
-    public void deletarConta(Long id) {
-        try {
-            contaRepositorio.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new RecursoNaoEncontradoException("Conta não encontrada " + id);
-        }
-    }
 
     public ContaDTO filtrarContaPorId(Long id) {
         Conta conta = contaRepositorio.findById(id).

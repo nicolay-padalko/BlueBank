@@ -19,7 +19,7 @@ public class AtualizarClienteDTO {
     }
 
     public AtualizarClienteDTO(Cliente entidade) {
-        this.telefone = entidade.getCpf();
+        this.telefone = entidade.getTelefone();
         this.email = entidade.getEmail();
         this.senha = entidade.getSenha();
     }
