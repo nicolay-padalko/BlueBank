@@ -9,17 +9,12 @@ import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import br.com.panacademy.bluebank.servico.ContaServico;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
-<<<<<<< HEAD
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.http.HttpStatus;
-=======
->>>>>>> 9a9138dbca151b7ea0b75aa5cd3c64d9cd6c64b6
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -91,15 +86,12 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "transferir/{contaIdOrigem}/{contaIdDestino}")
-<<<<<<< HEAD
     @ApiOperation("Transferência entre clientes do banco")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
     })
-    public ResponseEntity<TransferirDTO> transferir(@PathVariable("contaIdOrigem") Long idOrigem,
-=======
+
     public ResponseEntity<TransferirDTO> transferir(@PathVariable("contaIdOrigem") Long id,
->>>>>>> 9a9138dbca151b7ea0b75aa5cd3c64d9cd6c64b6
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody TransferirDTO dto){
 
@@ -109,11 +101,7 @@ public class TransacaoControle {
     }
 
     @GetMapping
-<<<<<<< HEAD
     @ApiOperation("Lista todas as transações efetuadas")
-    public ResponseEntity<List<Transacao>> listarTodasTransacoes(){
-        List<Transacao> listaTransacoesDTO = transacaoServico.listarTodos();
-=======
     public ResponseEntity<List<Transacao>> listarTodasTransacoes(HttpServletRequest request){
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -127,13 +115,12 @@ public class TransacaoControle {
             listaTransacoesDTO = transacaoServico.listarTodosDoUsuario(conta.getContaId());
         }
 
->>>>>>> 9a9138dbca151b7ea0b75aa5cd3c64d9cd6c64b6
         return ResponseEntity.ok(listaTransacoesDTO);
     }
 
     private String recuperarToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if(token == null || token.isEmpty() || !token.startsWith("Bearer ")){
+        if(token == null || !token.startsWith("Bearer ")){
             return null;
         }
 

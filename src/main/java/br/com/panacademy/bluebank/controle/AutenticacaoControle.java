@@ -3,15 +3,13 @@ package br.com.panacademy.bluebank.controle;
 import br.com.panacademy.bluebank.config.security.TokenServico;
 import br.com.panacademy.bluebank.dto.LoginDTO;
 import br.com.panacademy.bluebank.dto.TokenDTO;
+import io.swagger.annotations.Api;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
