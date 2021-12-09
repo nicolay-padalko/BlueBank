@@ -2,6 +2,7 @@ package br.com.panacademy.bluebank;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication(exclude = {
         org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration.class,

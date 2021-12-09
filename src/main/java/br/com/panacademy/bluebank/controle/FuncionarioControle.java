@@ -9,6 +9,7 @@ import br.com.panacademy.bluebank.servico.FuncionarioServico;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.SubscribeRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -61,7 +62,7 @@ public class FuncionarioControle {
     }
 
     @PutMapping()
-    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(HttpServletRequest request, @RequestBody AtualizarFuncionarioDTO dto) {
+    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(HttpServletRequest request, @Valid @RequestBody AtualizarFuncionarioDTO dto) {
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
         dto = funcionarioServico.atualizarFuncionario(idUsuario, dto);
@@ -69,13 +70,13 @@ public class FuncionarioControle {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(@PathVariable Long id, @RequestBody AtualizarFuncionarioDTO dto) {
+    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(@PathVariable Long id, @Valid @RequestBody AtualizarFuncionarioDTO dto) {
         dto = funcionarioServico.atualizarFuncionario(id, dto);
         return ResponseEntity.ok().body(dto);
     }
 
     @PutMapping("/credenciais/{id}")
-    public ResponseEntity<AtualizarCredenciaisFuncionarioDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisFuncionarioDTO dto) {
+    public ResponseEntity<AtualizarCredenciaisFuncionarioDTO> atualizarCredenciais(@PathVariable Long id, @Valid @RequestBody AtualizarCredenciaisFuncionarioDTO dto) {
         dto = funcionarioServico.atualizarCredenciaisFuncionario(id, dto);
         return ResponseEntity.ok().body(dto);
     }
@@ -94,8 +95,5 @@ public class FuncionarioControle {
 
         return token.substring(7, token.length());
     }
-
-
-
-
 }
+

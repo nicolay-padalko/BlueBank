@@ -11,12 +11,12 @@ import javax.validation.constraints.Size;
 public abstract class OperacaoDTO {
 
     @DecimalMin(value = "0.0", inclusive = false)
-//    @Pattern(regexp = "^(\\d{1,3}(\\,\\d{3})*|\\d+)(\\.\\d{1,2})?$")
     private Double valor;
     private Double saldo;
     @Size(max=200)
     private String descricao;
     private TipoTransacao tipoTransacao;
+
 
     public OperacaoDTO() {
     }

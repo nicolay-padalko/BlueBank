@@ -55,7 +55,7 @@ public class ClienteControle {
     }
 
     @PutMapping()
-    public ResponseEntity<AtualizarClienteDTO> atualizarCliente(HttpServletRequest request, @RequestBody AtualizarClienteDTO dto) {
+    public ResponseEntity<AtualizarClienteDTO> atualizarCliente(HttpServletRequest request, @Valid @RequestBody AtualizarClienteDTO dto) {
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
         dto = clienteServico.atualizarCliente(idUsuario, dto);
@@ -63,13 +63,13 @@ public class ClienteControle {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody AtualizarClienteDTO dto) {
+    public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @Valid @RequestBody AtualizarClienteDTO dto) {
         dto = clienteServico.atualizarCliente(id, dto);
         return ResponseEntity.ok().body(dto);
     }
 
     @PutMapping("/credenciais/{id}")
-    public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
+    public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @Valid @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);
     }
