@@ -17,10 +17,10 @@ public class AtualizarCredenciaisFuncionarioDTO {
     public AtualizarCredenciaisFuncionarioDTO() {
     }
 
-    public AtualizarCredenciaisFuncionarioDTO(Funcionario entidade) {
+    public AtualizarCredenciaisFuncionarioDTO(Funcionario entidade, AtualizarCredenciaisFuncionarioDTO dto) {
         this.cpf = entidade.getCpf();
         this.email = entidade.getEmail();
-        this.senha = entidade.getSenha();
+        this.senha = dto.getSenha();
     }
 
     public String getCpf() {

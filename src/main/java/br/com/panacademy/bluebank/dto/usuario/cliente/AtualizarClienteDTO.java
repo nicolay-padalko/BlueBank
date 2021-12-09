@@ -18,10 +18,10 @@ public class AtualizarClienteDTO {
     public AtualizarClienteDTO() {
     }
 
-    public AtualizarClienteDTO(Cliente entidade) {
+    public AtualizarClienteDTO(Cliente entidade, AtualizarClienteDTO dto) {
         this.telefone = entidade.getTelefone();
         this.email = entidade.getEmail();
-        this.senha = entidade.getSenha();
+        this.senha = dto.getSenha();
     }
 
     public String getTelefone() {

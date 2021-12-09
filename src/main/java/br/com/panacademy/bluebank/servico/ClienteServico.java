@@ -100,7 +100,7 @@ public class ClienteServico {
         }
     }
 
-    @Transactional
+    @Transactional()
     public AtualizarCredenciaisClienteDTO atualizarCredenciaisCliente(Long id, AtualizarCredenciaisClienteDTO dto) {
         Cliente entidade = clienteRepositorio.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente de id: " + id + " não encontrado"));
@@ -112,7 +112,8 @@ public class ClienteServico {
         entidade.setSenha(senhaCodificada);
 
         entidade = clienteRepositorio.save(entidade);
-        return new AtualizarCredenciaisClienteDTO(entidade);
+
+        return new AtualizarCredenciaisClienteDTO(entidade, dto);
     }
 
     @Transactional
@@ -128,7 +129,7 @@ public class ClienteServico {
 
         clienteRepositorio.save(entidade);
 
-        return new AtualizarClienteDTO(entidade);
+        return new AtualizarClienteDTO(entidade, dto);
     }
 
     public String identificaTipoPorId(Long idUsuario) {

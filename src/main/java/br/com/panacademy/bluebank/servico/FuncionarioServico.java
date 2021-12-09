@@ -88,7 +88,7 @@ public class FuncionarioServico {
         entidade.setSenha(senhaCodificada);
 
         entidade = funcionarioRepositorio.save(entidade);
-        return new AtualizarCredenciaisFuncionarioDTO(entidade);
+        return new AtualizarCredenciaisFuncionarioDTO(entidade, dto);
     }
 
 
@@ -104,7 +104,7 @@ public class FuncionarioServico {
         entidade.setSenha(senhaCodificada);
 
         entidade = funcionarioRepositorio.save(entidade);
-        return new AtualizarFuncionarioDTO(entidade);
+        return new AtualizarFuncionarioDTO(entidade, dto);
     }
 
     private String buildEmailBody(FuncionarioDTO funcionario) {

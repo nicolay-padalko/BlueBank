@@ -18,10 +18,10 @@ public class AtualizarFuncionarioDTO {
     public AtualizarFuncionarioDTO() {
     }
 
-    public AtualizarFuncionarioDTO(Funcionario entidade) {
+    public AtualizarFuncionarioDTO(Funcionario entidade, AtualizarFuncionarioDTO dto) {
         this.telefone = entidade.getTelefone();
         this.email = entidade.getEmail();
-        this.senha = entidade.getSenha();
+        this.senha = dto.getSenha();
     }
 
     public String getTelefone() {
