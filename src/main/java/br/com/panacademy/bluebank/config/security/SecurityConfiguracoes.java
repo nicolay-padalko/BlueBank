@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,6 +39,20 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
+
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            web.ignoring().antMatchers("/v2/api-docs",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/security",
+                    "/swagger-ui.html",
+                    "/webjars/**");
+        }
+
+
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -67,8 +82,8 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/transacoes/depositar/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/transacoes/sacar/*").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST,"/transacoes/transferir/*/*").hasRole("ADMIN")
-                .antMatchers("/swagger-ui.html#").permitAll()
-//                .antMatchers("/**").permitAll()
+             //   .antMatchers("/swagger-ui/**").permitAll()
+   //             .antMatchers("/**").permitAll()
                 .anyRequest().denyAll()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
