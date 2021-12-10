@@ -8,6 +8,7 @@ import br.com.panacademy.bluebank.dto.usuario.funcionario.FuncionarioDTO;
 import br.com.panacademy.bluebank.servico.FuncionarioServico;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.SubscribeRequest;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,7 +26,7 @@ public class FuncionarioControle {
     private final AmazonSNSClient snsClient;
     private final TokenServico tokenServico;
 
-    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:SQ02T2";
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:965934840569:PanCodersSNSTopic";
 
     public FuncionarioControle(FuncionarioServico funcionarioServico, AmazonSNSClient snsClient, TokenServico tokenServico) {
         this.funcionarioServico = funcionarioServico;
@@ -35,18 +36,21 @@ public class FuncionarioControle {
 
 
     @GetMapping
+    @ApiOperation("Lista todos os funcionários")
     public ResponseEntity<List<FuncionarioDTO>> listarTodosFuncionarios() {
         List<FuncionarioDTO> listaFuncionariosDTO = funcionarioServico.listarTodos();
         return ResponseEntity.ok(listaFuncionariosDTO);
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Lista um funcionário, filtrando pelo ID")
     public ResponseEntity<FuncionarioDTO> filtrarPorId(@PathVariable Long id) {
         FuncionarioDTO funcionarioDTO = funcionarioServico.filtrarPorId(id);
         return ResponseEntity.ok(funcionarioDTO);
     }
 
     @PostMapping
+    @ApiOperation("Cadastra um funcionário")
     public ResponseEntity<FuncionarioDTO> salvarFuncionario(@Valid @RequestBody CadastrarFuncionarioDTO funcionario) {
         FuncionarioDTO funcionarioDTO = funcionarioServico.salvarFuncionario(funcionario);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
@@ -55,13 +59,15 @@ public class FuncionarioControle {
     }
 
     @DeleteMapping(value = "/{id}")
+    @ApiOperation("Deleta o cadastro de um funcionário")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         funcionarioServico.deletarFuncionario(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping()
-    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(HttpServletRequest request, @Valid @RequestBody AtualizarFuncionarioDTO dto) {
+    @ApiOperation("Atualiza os dados de um funcionário")
+    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(HttpServletRequest request, @RequestBody AtualizarFuncionarioDTO dto) {
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
         dto = funcionarioServico.atualizarFuncionario(idUsuario, dto);
@@ -69,18 +75,21 @@ public class FuncionarioControle {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(@PathVariable Long id, @Valid @RequestBody AtualizarFuncionarioDTO dto) {
+    @ApiOperation("Atualiza os dados de um funcionário, filtrando pelo ID")
+    public ResponseEntity<AtualizarFuncionarioDTO> atualizarFuncionario(@PathVariable Long id, @RequestBody AtualizarFuncionarioDTO dto) {
         dto = funcionarioServico.atualizarFuncionario(id, dto);
         return ResponseEntity.ok().body(dto);
     }
 
     @PutMapping("/credenciais/{id}")
-    public ResponseEntity<AtualizarCredenciaisFuncionarioDTO> atualizarCredenciais(@PathVariable Long id, @Valid @RequestBody AtualizarCredenciaisFuncionarioDTO dto) {
+    @ApiOperation("Atualiza as credenciais de um funcionário")
+    public ResponseEntity<AtualizarCredenciaisFuncionarioDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisFuncionarioDTO dto) {
         dto = funcionarioServico.atualizarCredenciaisFuncionario(id, dto);
         return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping("/cadastrarEmail/{email}")
+    @ApiOperation("Confirma o cadastro de um funcionário, com aviso por e-mail")
     public void subscreverFuncionario(@PathVariable("email") String email) {
         SubscribeRequest request = new SubscribeRequest(TOPIC_ARN, "email", email);
         snsClient.subscribe(request);
@@ -94,5 +103,8 @@ public class FuncionarioControle {
 
         return token.substring(7, token.length());
     }
-}
 
+
+
+
+}

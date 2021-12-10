@@ -9,16 +9,19 @@ import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import br.com.panacademy.bluebank.servico.ContaServico;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/transacoes")
 public class TransacaoControle {
 
@@ -35,6 +38,7 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "depositar")
+    @ApiOperation("Efetua um depósito na conta do cliente")
     public ResponseEntity<DepositarDTO> depositar(HttpServletRequest request, @Valid @RequestBody DepositarDTO dto, BindingResult result){
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -44,6 +48,10 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "sacar")
+    @ApiOperation("Efetua um saque da conta do cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<SacarDTO> sacar(HttpServletRequest request, @RequestBody SacarDTO dto){
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -53,6 +61,10 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "transferir/{contaIdDestino}")
+    @ApiOperation("Efetua uma transferência para outro cliente do banco")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<TransferirDTO> transferir(HttpServletRequest request,
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody TransferirDTO dto){
@@ -66,18 +78,28 @@ public class TransacaoControle {
     }
 
     @PostMapping(value = "depositar/{contaId}")
+    @ApiOperation("Efetua um depósito na conta do cliente, filtrado pelo ID")
     public ResponseEntity<DepositarDTO> depositar(@PathVariable("contaId") Long id, @Valid @RequestBody DepositarDTO dto, BindingResult result){
         dto = transacaoServico.depositar(id, dto);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping(value = "sacar/{contaId}")
+    @ApiOperation("Efetua um saque da conta do cliente, filtrado pelo ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
     public ResponseEntity<SacarDTO> sacar(@PathVariable("contaId") Long id, @RequestBody SacarDTO dto){
         dto = transacaoServico.sacar(id, dto);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping(value = "transferir/{contaIdOrigem}/{contaIdDestino}")
+    @ApiOperation("Transferência entre contas do banco, filtrada pelos ID´s")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
+    })
+
     public ResponseEntity<TransferirDTO> transferir(@PathVariable("contaIdOrigem") Long id,
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody TransferirDTO dto){
@@ -88,6 +110,7 @@ public class TransacaoControle {
     }
 
     @GetMapping
+    @ApiOperation("Lista todas as transações efetuadas")
     public ResponseEntity<List<Transacao>> listarTodasTransacoes(HttpServletRequest request){
         String token = recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -106,7 +129,7 @@ public class TransacaoControle {
 
     private String recuperarToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if(token == null || token.isEmpty() || !token.startsWith("Bearer ")){
+        if(token == null || !token.startsWith("Bearer ")){
             return null;
         }
 
