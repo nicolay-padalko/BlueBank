@@ -6,9 +6,9 @@ import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClient
 import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
+import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.Perfil;
 import br.com.panacademy.bluebank.modelo.usuario.Cliente;
-import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.usuario.Usuario;
 import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
@@ -16,6 +16,9 @@ import br.com.panacademy.bluebank.repositorio.PerfilRespositorio;
 import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ClienteServico {
@@ -43,18 +45,20 @@ public class ClienteServico {
     }
 
     @Transactional(readOnly = true)
-    public List<ClienteDTO> listarTodos(HttpServletRequest request) {
+    public Page<ClienteDTO> listarTodos(HttpServletRequest request, PageRequest pageRequest) {
         String token = tokenServico.recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
         String tipo = identificaTipoPorId(idUsuario);
-        List<Cliente> listClienteDTO = new ArrayList<>();
+        List<Cliente> usuario = new ArrayList<>();
         if(tipo.equals("ADMIN")) {
-            listClienteDTO =  clienteRepositorio.findAll();
+            Page<Cliente> listaUsuariosPaginados =  clienteRepositorio.findAll(pageRequest);
+            return listaUsuariosPaginados.map(ClienteDTO::new);
         }else if(tipo.equals("CLIENTE")){
-            listClienteDTO = List.of(clienteRepositorio.findById(idUsuario)
+            usuario = List.of(clienteRepositorio.findById(idUsuario)
                     .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idUsuario)));
         }
-        return listClienteDTO.stream().map(ClienteDTO::new).collect(Collectors.toList());
+        Page<Cliente> cliente = new PageImpl<>(usuario);
+        return cliente.map(ClienteDTO::new);
     }
 
     @Transactional(readOnly = true)

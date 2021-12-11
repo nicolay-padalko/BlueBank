@@ -1,6 +1,8 @@
 package br.com.panacademy.bluebank.controle;
 
 
+import br.com.panacademy.bluebank.config.swagger.RespostaDelecaoAPI;
+import br.com.panacademy.bluebank.config.swagger.RespostasCriacaoRecursoAPI;
 import br.com.panacademy.bluebank.dto.perfil.CadastrarPefilDTO;
 import br.com.panacademy.bluebank.dto.perfil.DeletarPerfilDTO;
 import br.com.panacademy.bluebank.servico.PerfilServico;
@@ -23,6 +25,7 @@ public class PerfilControle {
 
     @PostMapping
     @ApiOperation("Cadastro de perfil")
+    @RespostasCriacaoRecursoAPI
     public ResponseEntity<CadastrarPefilDTO> adicionarPerfil (@RequestBody @Valid CadastrarPefilDTO cadastrarPefil){
         Boolean salvou = perfilServico.cadastrarPefil(cadastrarPefil);
         if(salvou){
@@ -33,10 +36,11 @@ public class PerfilControle {
 
     @DeleteMapping
     @ApiOperation("Exclusão de perfil")
+    @RespostaDelecaoAPI
     public ResponseEntity<DeletarPerfilDTO> deletarPerfil (@RequestBody @Valid DeletarPerfilDTO deletarPefil){
         Boolean deletou = perfilServico.deletarPerfil(deletarPefil);
         if(deletou){
-            return ResponseEntity.ok().body(deletarPefil);
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.badRequest().body(deletarPefil);
     }

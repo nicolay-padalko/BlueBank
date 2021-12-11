@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.config.security.TokenServico;
+import br.com.panacademy.bluebank.config.swagger.RespostasPadraoAPI;
 import br.com.panacademy.bluebank.config.swagger.RespostasApiOperacoes;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.OperacaoEntradaDTO;
@@ -11,12 +12,14 @@ import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.servico.ContaServico;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -31,6 +34,19 @@ public class TransacaoControle {
         this.transacaoServico = transacaoServico;
         this.tokenServico = tokenServico;
         this.contaServico = contaServico;
+    }
+
+    @GetMapping
+    @ApiOperation("Lista todas as transações efetuadas")
+    @RespostasPadraoAPI
+    public ResponseEntity<Page<Transacao>> listarTodasTransacoes(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                 @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
+                                                                 @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                                                 @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Page<Transacao> listaTransacoes = transacaoServico.listarTodos(request, pageRequest);
+        return ResponseEntity.ok(listaTransacoes);
     }
 
     @PostMapping(value = "depositar")
@@ -98,10 +114,5 @@ public class TransacaoControle {
 
     }
 
-    @GetMapping
-    @ApiOperation("Lista todas as transações efetuadas")
-    public ResponseEntity<List<Transacao>> listarTodasTransacoes(HttpServletRequest request){
-        List<Transacao> listaTransacoes = transacaoServico.listarTodos(request);
-        return ResponseEntity.ok(listaTransacoes);
-    }
+
 }

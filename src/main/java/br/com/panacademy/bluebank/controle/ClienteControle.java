@@ -1,20 +1,25 @@
 package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.config.security.TokenServico;
-import br.com.panacademy.bluebank.config.swagger.RespostasApi;
+import br.com.panacademy.bluebank.config.swagger.RespostaDelecaoAPI;
+import br.com.panacademy.bluebank.config.swagger.RespostasCriacaoRecursoAPI;
+import br.com.panacademy.bluebank.config.swagger.RespostasPadraoAPI;
 import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.ClienteDTO;
 import br.com.panacademy.bluebank.servico.ClienteServico;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -32,15 +37,20 @@ public class ClienteControle {
 
     @GetMapping
     @ApiOperation(("Lista todos os clientes"))
-    @RespostasApi
-    public ResponseEntity<List<ClienteDTO>> listarTodosClientes(HttpServletRequest request) {
-        List<ClienteDTO> listClienteDTO = clienteServico.listarTodos(request);
+    @RespostasPadraoAPI
+    public ResponseEntity<Page<ClienteDTO>> listarTodosClientes(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
+                                                                @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                                                @RequestParam(value = "orderBy", defaultValue = "nome") String orderBy) {
+
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Page<ClienteDTO> listClienteDTO = clienteServico.listarTodos(request, pageRequest);
         return ResponseEntity.ok(listClienteDTO);
     }
 
     @GetMapping("/{id}")
     @ApiOperation("Lista um cliente, filtrando pelo ID")
-    @RespostasApi
+    @RespostasPadraoAPI
     public ResponseEntity<ClienteDTO> filtrarPorId(@PathVariable Long id) {
         ClienteDTO clienteDTO = clienteServico.filtrarPorId(id);
         return ResponseEntity.ok(clienteDTO);
@@ -48,7 +58,7 @@ public class ClienteControle {
 
     @PostMapping
     @ApiOperation("Cadastra um cliente, com atribuição dinâmica de ID")
-    @RespostasApi
+    @RespostasCriacaoRecursoAPI
     public ResponseEntity<ClienteDTO> salvarCliente(@Valid @RequestBody CadastrarClienteDTO cliente) {
         ClienteDTO clienteDTO = clienteServico.salvarCliente(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
@@ -58,7 +68,7 @@ public class ClienteControle {
 
     @DeleteMapping(value = "/{id}")
     @ApiOperation("Deleta um cliente, filtrando pelo ID")
-    @RespostasApi
+    @RespostaDelecaoAPI
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteServico.deletarCliente(id);
         return ResponseEntity.noContent().build();
@@ -66,7 +76,7 @@ public class ClienteControle {
 
     @PutMapping()
     @ApiOperation("Atualiza um cliente")
-    @RespostasApi
+    @RespostasCriacaoRecursoAPI
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(HttpServletRequest request, @RequestBody AtualizarClienteDTO dto) {
         String token = tokenServico.recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -76,7 +86,7 @@ public class ClienteControle {
 
     @PutMapping("/{id}")
     @ApiOperation("Atualização de telefone, email e senha do cliente, filtrando pelo ID")
-    @RespostasApi
+    @RespostasCriacaoRecursoAPI
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody AtualizarClienteDTO dto) {
         dto = clienteServico.atualizarCliente(id, dto);
         return ResponseEntity.ok().body(dto);
@@ -84,7 +94,7 @@ public class ClienteControle {
 
     @PutMapping("/credenciais/{id}")
     @ApiOperation("Atualiza as credenciais do cliente, filtrando pelo ID")
-    @RespostasApi
+    @RespostasCriacaoRecursoAPI
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);

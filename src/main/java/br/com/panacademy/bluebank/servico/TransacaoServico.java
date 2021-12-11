@@ -8,6 +8,9 @@ import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,21 @@ public class TransacaoServico {
         this.tokenServico = tokenServico;
         this.contaServico = contaServico;
     }
+
+    public Page<Transacao> listarTodos(HttpServletRequest request, PageRequest pageRequest){
+        String token = tokenServico.recuperarToken(request);
+        Long idUsuario = tokenServico.getIdUsuario(token);
+        String tipo = clienteServico.identificaTipoPorId(idUsuario);
+        List<Transacao> listaTransacoes = new ArrayList<>();
+        if(tipo.equals("ADMIN")) {
+            return transacaoRepositorio.findAll(pageRequest);
+        }else if(tipo.equals("CLIENTE")){
+            Conta conta = contaServico.filtrarContaPorIdUsuario(idUsuario);
+            listaTransacoes = transacaoRepositorio.findAllByContaUsuario(conta.getContaId());
+        }
+        return new PageImpl<>(listaTransacoes);
+    }
+
 
     @Transactional
     public DepositarDTO depositar(Long contaId, OperacaoEntradaDTO operacao) {
@@ -108,20 +126,6 @@ public class TransacaoServico {
         Double saldo = deposito.getValor() + cliente.getConta().getSaldo();
          cliente.getConta().setSaldo(saldo);
          return cliente.getConta().getSaldo();
-    }
-
-    public List<Transacao> listarTodos(HttpServletRequest request){
-        String token = tokenServico.recuperarToken(request);
-        Long idUsuario = tokenServico.getIdUsuario(token);
-        String tipo = clienteServico.identificaTipoPorId(idUsuario);
-        List<Transacao> listaTransacoes = new ArrayList<>();
-        if(tipo.equals("ADMIN")) {
-            listaTransacoes = transacaoRepositorio.findAll();
-        }else if(tipo.equals("CLIENTE")){
-            Conta conta = contaServico.filtrarContaPorIdUsuario(idUsuario);
-            listaTransacoes = transacaoRepositorio.findAllByContaUsuario(conta.getContaId());
-        }
-        return listaTransacoes;
     }
 
 }

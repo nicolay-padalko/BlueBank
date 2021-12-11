@@ -1,17 +1,16 @@
 package br.com.panacademy.bluebank.controle;
 
-import br.com.panacademy.bluebank.config.security.TokenServico;
+import br.com.panacademy.bluebank.config.swagger.RespostasPadraoAPI;
 import br.com.panacademy.bluebank.dto.ContaDTO;
-import br.com.panacademy.bluebank.modelo.Conta;
-import br.com.panacademy.bluebank.servico.ClienteServico;
 import br.com.panacademy.bluebank.servico.ContaServico;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @RestController
@@ -19,52 +18,33 @@ import java.util.List;
 public class ContaControle {
 
     private final ContaServico contaServico;
-    private final TokenServico tokenServico;
-    private final ClienteServico clienteServico;
 
-    public ContaControle(ContaServico contaServico, TokenServico tokenServico, ClienteServico clienteServico) {
+
+    public ContaControle(ContaServico contaServico) {
         this.contaServico = contaServico;
-        this.tokenServico = tokenServico;
-        this.clienteServico = clienteServico;
     }
 
     @GetMapping
     @ApiOperation("Lista todas as contas")
-    public ResponseEntity<List<ContaDTO>> listarTodasAsContas(HttpServletRequest request) {
-        String token = recuperarToken(request);
-        Long idUsuario = tokenServico.getIdUsuario(token);
-        String tipo = identificaTipo(idUsuario);
-        List<ContaDTO> listaContaDTO = new ArrayList<>();
+    @RespostasPadraoAPI
+    public ResponseEntity<Page<ContaDTO>> listarTodasAsContas(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                              @RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
+                                                              @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                                              @RequestParam(value = "orderBy", defaultValue = "contaId") String orderBy) {
 
-        if (tipo.equals("ADMIN")) {
-            listaContaDTO = contaServico.listarTodas();
-        } else if (tipo.equals("CLIENTE")) {
-            Conta conta = contaServico.filtrarContaPorIdUsuario(idUsuario);
-            listaContaDTO.add(new ContaDTO(conta));
-        }
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        Page<ContaDTO> listaContaDTO = contaServico.listarTodas(request, pageRequest);
+
         return ResponseEntity.ok(listaContaDTO);
     }
 
     @GetMapping(value = "/{id}")
     @ApiOperation("Lista uma conta, filtrando pelo ID")
+    @RespostasPadraoAPI
     public ResponseEntity<ContaDTO> filtrarContaPorId(@PathVariable Long id) {
         ContaDTO conta = contaServico.filtrarContaPorId(id);
         return ResponseEntity.ok(conta);
     }
-
-    private String recuperarToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
-            return null;
-        }
-
-        return token.substring(7, token.length());
-    }
-
-    private String identificaTipo(Long idUsuario) {
-        return clienteServico.identificaTipoPorId(idUsuario);
-    }
-
 
 }
 

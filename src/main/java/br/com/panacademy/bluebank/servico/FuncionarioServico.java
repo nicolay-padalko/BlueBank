@@ -13,6 +13,8 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.PublishRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,9 +39,9 @@ public class FuncionarioServico {
 
 
     @Transactional(readOnly = true)
-    public List<FuncionarioDTO> listarTodos() {
-        List<Funcionario> listaFuncionarios = funcionarioRepositorio.findAll();
-        return listaFuncionarios.stream().map(FuncionarioDTO::new).collect(Collectors.toList());
+    public Page<FuncionarioDTO> listarTodos(PageRequest pageRequest) {
+        Page<Funcionario> listaFuncionarios = funcionarioRepositorio.findAll(pageRequest);
+        return listaFuncionarios.map(FuncionarioDTO::new);
     }
 
     @Transactional(readOnly = true)
