@@ -28,13 +28,11 @@ public class TransacaoControle {
     private final TransacaoServico transacaoServico;
     private final TokenServico tokenServico;
     private final ContaServico contaServico;
-    private final ClienteServico clienteServico;
 
-    public TransacaoControle(TransacaoServico transacaoServico, TokenServico tokenServico, ContaServico contaServico, ClienteServico clienteServico) {
+    public TransacaoControle(TransacaoServico transacaoServico, TokenServico tokenServico, ContaServico contaServico) {
         this.transacaoServico = transacaoServico;
         this.tokenServico = tokenServico;
         this.contaServico = contaServico;
-        this.clienteServico = clienteServico;
     }
 
     @PostMapping(value = "depositar")
@@ -105,16 +103,7 @@ public class TransacaoControle {
     @GetMapping
     @ApiOperation("Lista todas as transações efetuadas")
     public ResponseEntity<List<Transacao>> listarTodasTransacoes(HttpServletRequest request){
-        String token = tokenServico.recuperarToken(request);
-        Long idUsuario = tokenServico.getIdUsuario(token);
-        String tipo = clienteServico.identificaTipoPorId(idUsuario);
-        List<Transacao> listaTransacoesDTO = new ArrayList<>();
-        if(tipo.equals("ADMIN")) {
-            listaTransacoesDTO = transacaoServico.listarTodos();
-        }else if(tipo.equals("CLIENTE")){
-            Conta conta = contaServico.filtrarContaPorIdUsuario(idUsuario);
-            listaTransacoesDTO = transacaoServico.listarTodosDoUsuario(conta.getContaId());
-        }
-        return ResponseEntity.ok(listaTransacoesDTO);
+        List<Transacao> listaTransacoes = transacaoServico.listarTodos(request);
+        return ResponseEntity.ok(listaTransacoes);
     }
 }

@@ -1,15 +1,17 @@
 package br.com.panacademy.bluebank.servico;
 
+import br.com.panacademy.bluebank.config.security.TokenServico;
 import br.com.panacademy.bluebank.dto.transacao.*;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
+import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 import br.com.panacademy.bluebank.repositorio.TransacaoRepositorio;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +21,14 @@ public class TransacaoServico {
 
     private final TransacaoRepositorio transacaoRepositorio;
     private final ClienteServico clienteServico;
+    private final TokenServico tokenServico;
+    private final ContaServico contaServico;
 
-    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico) {
+    public TransacaoServico(TransacaoRepositorio transacaoRepositorio, ClienteServico clienteServico, TokenServico tokenServico, ContaServico contaServico) {
         this.transacaoRepositorio = transacaoRepositorio;
         this.clienteServico = clienteServico;
-
+        this.tokenServico = tokenServico;
+        this.contaServico = contaServico;
     }
 
     @Transactional
@@ -105,13 +110,18 @@ public class TransacaoServico {
          return cliente.getConta().getSaldo();
     }
 
-    public List<Transacao> listarTodos(){
-        return transacaoRepositorio.findAll();
-
-    }
-
-    public List<Transacao> listarTodosDoUsuario(Long idContaUsuario) {
-        return transacaoRepositorio.findAllByContaUsuario(idContaUsuario);
+    public List<Transacao> listarTodos(HttpServletRequest request){
+        String token = tokenServico.recuperarToken(request);
+        Long idUsuario = tokenServico.getIdUsuario(token);
+        String tipo = clienteServico.identificaTipoPorId(idUsuario);
+        List<Transacao> listaTransacoes = new ArrayList<>();
+        if(tipo.equals("ADMIN")) {
+            listaTransacoes = transacaoRepositorio.findAll();
+        }else if(tipo.equals("CLIENTE")){
+            Conta conta = contaServico.filtrarContaPorIdUsuario(idUsuario);
+            listaTransacoes = transacaoRepositorio.findAllByContaUsuario(conta.getContaId());
+        }
+        return listaTransacoes;
     }
 
 }
