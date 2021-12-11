@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.config.security.TokenServico;
+import br.com.panacademy.bluebank.config.swagger.RespostasApi;
 import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
@@ -31,13 +32,15 @@ public class ClienteControle {
 
     @GetMapping
     @ApiOperation(("Lista todos os clientes"))
-    public ResponseEntity<List<ClienteDTO>> listarTodosClientes() {
-        List<ClienteDTO> listaClientesDTO = clienteServico.listarTodos();
-        return ResponseEntity.ok(listaClientesDTO);
+    @RespostasApi
+    public ResponseEntity<List<ClienteDTO>> listarTodosClientes(HttpServletRequest request) {
+        List<ClienteDTO> listClienteDTO = clienteServico.listarTodos(request);
+        return ResponseEntity.ok(listClienteDTO);
     }
 
     @GetMapping("/{id}")
     @ApiOperation("Lista um cliente, filtrando pelo ID")
+    @RespostasApi
     public ResponseEntity<ClienteDTO> filtrarPorId(@PathVariable Long id) {
         ClienteDTO clienteDTO = clienteServico.filtrarPorId(id);
         return ResponseEntity.ok(clienteDTO);
@@ -45,6 +48,7 @@ public class ClienteControle {
 
     @PostMapping
     @ApiOperation("Cadastra um cliente, com atribuição dinâmica de ID")
+    @RespostasApi
     public ResponseEntity<ClienteDTO> salvarCliente(@Valid @RequestBody CadastrarClienteDTO cliente) {
         ClienteDTO clienteDTO = clienteServico.salvarCliente(cliente);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
@@ -54,6 +58,7 @@ public class ClienteControle {
 
     @DeleteMapping(value = "/{id}")
     @ApiOperation("Deleta um cliente, filtrando pelo ID")
+    @RespostasApi
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         clienteServico.deletarCliente(id);
         return ResponseEntity.noContent().build();
@@ -61,8 +66,9 @@ public class ClienteControle {
 
     @PutMapping()
     @ApiOperation("Atualiza um cliente")
+    @RespostasApi
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(HttpServletRequest request, @RequestBody AtualizarClienteDTO dto) {
-        String token = recuperarToken(request);
+        String token = tokenServico.recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
         dto = clienteServico.atualizarCliente(idUsuario, dto);
         return ResponseEntity.ok().body(dto);
@@ -70,6 +76,7 @@ public class ClienteControle {
 
     @PutMapping("/{id}")
     @ApiOperation("Atualização de telefone, email e senha do cliente, filtrando pelo ID")
+    @RespostasApi
     public ResponseEntity<AtualizarClienteDTO> atualizarCliente(@PathVariable Long id, @RequestBody AtualizarClienteDTO dto) {
         dto = clienteServico.atualizarCliente(id, dto);
         return ResponseEntity.ok().body(dto);
@@ -77,18 +84,11 @@ public class ClienteControle {
 
     @PutMapping("/credenciais/{id}")
     @ApiOperation("Atualiza as credenciais do cliente, filtrando pelo ID")
+    @RespostasApi
     public ResponseEntity<AtualizarCredenciaisClienteDTO> atualizarCredenciais(@PathVariable Long id, @RequestBody AtualizarCredenciaisClienteDTO dto) {
         dto = clienteServico.atualizarCredenciaisCliente(id, dto);
         return ResponseEntity.ok().body(dto);
     }
 
-    private String recuperarToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
-            return null;
-        }
-
-        return token.substring(7, token.length());
-    }
 }
 

@@ -1,5 +1,6 @@
 package br.com.panacademy.bluebank.servico;
 
+import br.com.panacademy.bluebank.config.security.TokenServico;
 import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.AtualizarCredenciaisClienteDTO;
 import br.com.panacademy.bluebank.dto.usuario.cliente.CadastrarClienteDTO;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,18 +32,29 @@ public class ClienteServico {
     private final ContaRepositorio contaRepositorio;
     private final PerfilRespositorio perfilRespositorio;
     private final UsuarioRepositorio usuarioRepositorio;
+    private final TokenServico tokenServico;
 
-    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio, UsuarioRepositorio usuarioRepositorio) {
+    public ClienteServico(ClienteRepositorio clienteRepositorio, ContaRepositorio contaRepositorio, PerfilRespositorio perfilRespositorio, UsuarioRepositorio usuarioRepositorio, TokenServico tokenServico) {
         this.clienteRepositorio = clienteRepositorio;
         this.contaRepositorio = contaRepositorio;
         this.perfilRespositorio = perfilRespositorio;
         this.usuarioRepositorio = usuarioRepositorio;
+        this.tokenServico = tokenServico;
     }
 
     @Transactional(readOnly = true)
-    public List<ClienteDTO> listarTodos() {
-        List<Cliente> listaClientes = clienteRepositorio.findAll();
-        return listaClientes.stream().map(ClienteDTO::new).collect(Collectors.toList());
+    public List<ClienteDTO> listarTodos(HttpServletRequest request) {
+        String token = tokenServico.recuperarToken(request);
+        Long idUsuario = tokenServico.getIdUsuario(token);
+        String tipo = identificaTipoPorId(idUsuario);
+        List<Cliente> listClienteDTO = new ArrayList<>();
+        if(tipo.equals("ADMIN")) {
+            listClienteDTO =  clienteRepositorio.findAll();
+        }else if(tipo.equals("CLIENTE")){
+            listClienteDTO = List.of(clienteRepositorio.findById(idUsuario)
+                    .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + idUsuario)));
+        }
+        return listClienteDTO.stream().map(ClienteDTO::new).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -146,7 +160,7 @@ public class ClienteServico {
                 return "CLIENTE";
             }
         }
-        if (entidade.getPerfis() == null | entidade.getPerfis().isEmpty()) {
+        if (entidade.getPerfis() == null) {
             throw new RecursoNaoEncontradoException("PERFIL INVALIDO");
         }
         return null;

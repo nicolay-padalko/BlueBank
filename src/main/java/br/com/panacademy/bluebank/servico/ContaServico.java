@@ -3,14 +3,11 @@ package br.com.panacademy.bluebank.servico;
 import br.com.panacademy.bluebank.dto.ContaDTO;
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
 import br.com.panacademy.bluebank.modelo.Conta;
-import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.repositorio.ContaRepositorio;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,9 +33,8 @@ public class ContaServico {
     }
 
     public Conta filtrarContaPorIdUsuario(Long id) {
-        Conta conta = contaRepositorio.findByIdUsuario(id).
+        return contaRepositorio.findByIdUsuario(id).
                 orElseThrow(() -> new RecursoNaoEncontradoException("Conta não encontrada"));
-        return conta;
     }
 
 }

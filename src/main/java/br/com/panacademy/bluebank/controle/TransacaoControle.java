@@ -1,7 +1,7 @@
 package br.com.panacademy.bluebank.controle;
 
 import br.com.panacademy.bluebank.config.security.TokenServico;
-import br.com.panacademy.bluebank.config.swagger.RespostasApi;
+import br.com.panacademy.bluebank.config.swagger.RespostasApiOperacoes;
 import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
 import br.com.panacademy.bluebank.dto.transacao.OperacaoEntradaDTO;
 import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
@@ -39,7 +39,7 @@ public class TransacaoControle {
 
     @PostMapping(value = "depositar")
     @ApiOperation("Efetua um depósito na conta do cliente")
-    @RespostasApi
+    @RespostasApiOperacoes
     public ResponseEntity<DepositarDTO> depositar(HttpServletRequest request, @Valid @RequestBody OperacaoEntradaDTO dto){
         String token = tokenServico.recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -50,7 +50,7 @@ public class TransacaoControle {
 
     @PostMapping(value = "sacar")
     @ApiOperation("Efetua um saque da conta do cliente")
-    @RespostasApi
+    @RespostasApiOperacoes
     public ResponseEntity<SacarDTO> sacar(HttpServletRequest request, @RequestBody OperacaoEntradaDTO dto){
         String token = tokenServico.recuperarToken(request);
         Long idUsuario = tokenServico.getIdUsuario(token);
@@ -61,7 +61,7 @@ public class TransacaoControle {
 
     @PostMapping(value = "transferir/{contaIdDestino}")
     @ApiOperation("Efetua uma transferência para outro cliente do banco")
-    @RespostasApi
+    @RespostasApiOperacoes
     public ResponseEntity<TransferirDTO> transferir(HttpServletRequest request,
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody OperacaoEntradaDTO dto){
@@ -76,7 +76,7 @@ public class TransacaoControle {
 
     @PostMapping(value = "depositar/{contaId}")
     @ApiOperation("Efetua um depósito na conta do cliente, filtrado pelo ID")
-    @RespostasApi
+    @RespostasApiOperacoes
     public ResponseEntity<DepositarDTO> depositar(@PathVariable("contaId") Long id, @Valid @RequestBody OperacaoEntradaDTO dto){
         DepositarDTO depositar = transacaoServico.depositar(id, dto);
         return ResponseEntity.ok(depositar);
@@ -84,7 +84,7 @@ public class TransacaoControle {
 
     @PostMapping(value = "sacar/{contaId}")
     @ApiOperation("Efetua um saque da conta do cliente, filtrado pelo ID")
-    @RespostasApi
+    @RespostasApiOperacoes
     public ResponseEntity<SacarDTO> sacar(@PathVariable("contaId") Long id, @RequestBody OperacaoEntradaDTO dto){
         SacarDTO sacar = transacaoServico.sacar(id, dto);
         return ResponseEntity.ok(sacar);
@@ -92,7 +92,7 @@ public class TransacaoControle {
 
     @PostMapping(value = "transferir/{contaIdOrigem}/{contaIdDestino}")
     @ApiOperation("Transferência entre contas do banco, filtrada pelos ID´s")
-    @RespostasApi
+    @RespostasApiOperacoes
     public ResponseEntity<TransferirDTO> transferir(@PathVariable("contaIdOrigem") Long id,
                                                     @PathVariable("contaIdDestino") Long idDestino,
                                                     @Valid @RequestBody OperacaoEntradaDTO dto){

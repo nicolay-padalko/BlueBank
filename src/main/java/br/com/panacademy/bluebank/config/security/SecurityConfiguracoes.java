@@ -39,48 +39,44 @@ public class SecurityConfiguracoes extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
-
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/v2/api-docs",
-                    "/configuration/**",
-                    "/swagger-resources/**",
-                    "/swagger-ui.html",
-                    "/webjars/**");
-        }
-
-
-
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/configuration/**",
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/webjars/**");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/auth").permitAll()
-                .antMatchers(HttpMethod.GET,"/clientes").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/clientes/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/clientes").permitAll()
-                .antMatchers(HttpMethod.DELETE,"/clientes/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/clientes").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.PUT,"/clientes/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/clientes/credenciais/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/contas").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.GET,"/contas/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/funcionarios").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/funcionarios/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/funcionarios").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/funcionarios/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/funcionarios/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT,"/funcionarios/credenciais/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/funcionarios/cadastrarEmail/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/perfis").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/perfis").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/transacoes").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.POST,"/transacoes/depositar").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.POST,"/transacoes/sacar").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.POST,"/transacoes/transferir/*").hasRole("CLIENTE")
-                .antMatchers(HttpMethod.POST,"/transacoes/depositar/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/transacoes/sacar/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/transacoes/transferir/*/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/clientes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.GET, "/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/clientes").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/clientes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.PUT, "/clientes/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/clientes/credenciais/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/contas").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.GET, "/contas/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/funcionarios").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/funcionarios").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/funcionarios/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/funcionarios/credenciais/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/funcionarios/cadastrarEmail/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/perfis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/perfis").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/transacoes").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST, "/transacoes/depositar").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST, "/transacoes/sacar").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST, "/transacoes/transferir/*").hasRole("CLIENTE")
+                .antMatchers(HttpMethod.POST, "/transacoes/depositar/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/transacoes/sacar/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/transacoes/transferir/*/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
