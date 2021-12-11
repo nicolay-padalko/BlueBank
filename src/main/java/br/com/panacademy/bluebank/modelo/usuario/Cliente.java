@@ -1,6 +1,7 @@
 package br.com.panacademy.bluebank.modelo.usuario;
 
 import br.com.panacademy.bluebank.modelo.Conta;
+
 import javax.persistence.*;
 
 @Entity

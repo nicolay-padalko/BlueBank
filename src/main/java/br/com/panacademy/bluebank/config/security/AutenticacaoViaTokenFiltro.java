@@ -1,9 +1,7 @@
 package br.com.panacademy.bluebank.config.security;
 
 import br.com.panacademy.bluebank.excecao.RecursoNaoEncontradoException;
-import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.usuario.Usuario;
-import br.com.panacademy.bluebank.repositorio.ClienteRepositorio;
 import br.com.panacademy.bluebank.repositorio.UsuarioRepositorio;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,10 +50,10 @@ public class AutenticacaoViaTokenFiltro extends OncePerRequestFilter {
 
     private String recuperarToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if(token == null || token.isEmpty() || !token.startsWith("Bearer ")){
+        if(token == null || !token.startsWith("Bearer ")){
             return null;
         }
 
-        return token.substring(7, token.length());
+        return token.substring(7);
     }
 }

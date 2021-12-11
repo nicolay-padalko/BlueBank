@@ -2,6 +2,7 @@ package br.com.panacademy.bluebank.dto.usuario.cliente;
 
 import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Conta;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.*;
@@ -32,6 +33,7 @@ public class CadastrarClienteDTO {
     @Size(min=8, max=30)
     private String senha;
 
+    @JsonIgnore
     private Conta conta;
 
     public CadastrarClienteDTO(String nome, String sobrenome, String telefone, String cpf, String email, String senha) {
