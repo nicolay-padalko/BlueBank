@@ -8,7 +8,6 @@ import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
 import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
 import br.com.panacademy.bluebank.modelo.Conta;
 import br.com.panacademy.bluebank.modelo.Transacao;
-import br.com.panacademy.bluebank.servico.ClienteServico;
 import br.com.panacademy.bluebank.servico.ContaServico;
 import br.com.panacademy.bluebank.servico.TransacaoServico;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

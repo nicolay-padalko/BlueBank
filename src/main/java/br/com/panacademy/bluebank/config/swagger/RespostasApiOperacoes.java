@@ -14,6 +14,7 @@ import static java.lang.annotation.ElementType.TYPE;
 @Target({METHOD, TYPE})
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "A solicitação foi atendida com sucesso"),
+        @ApiResponse(code = 201, message = "A solicitação foi atendida com sucesso e o recurso foi criado"),
         @ApiResponse(code = 400, message = "O saldo informado é insuficiente"),
         @ApiResponse(code = 401, message = "Você deve se autenticar para acessar o recurso."),
         @ApiResponse(code = 403, message = "Você não está autorizado a acessar este recurso."),
