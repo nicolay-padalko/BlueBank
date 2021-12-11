@@ -29,6 +29,10 @@ public class TransferirDTO extends OperacaoDTO {
         this.idContaDestino = idContaDestino;
     }
 
+    public TransferirDTO(OperacaoEntradaDTO operacao) {
+        super(operacao);
+    }
+
     public Long getIdContaOrigem() {
         return idContaOrigem;
     }

@@ -11,6 +11,10 @@ public class SacarDTO extends OperacaoDTO {
         super(valor, saldo, descricao, tipoTransacao);
     }
 
+    public SacarDTO(OperacaoEntradaDTO operacao){
+        super(operacao);
+    }
+
     public SacarDTO(TransferirDTO transferir) {
         super(transferir.getValor());
     }

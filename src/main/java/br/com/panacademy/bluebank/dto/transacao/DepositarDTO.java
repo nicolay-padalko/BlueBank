@@ -12,6 +12,10 @@ public class DepositarDTO extends OperacaoDTO {
         super(valor, saldo, descricao, tipoTransacao);
     }
 
+    public DepositarDTO(OperacaoEntradaDTO operacao) {
+        super(operacao);
+    }
+
     public DepositarDTO(TransferirDTO transferir) {
         super(transferir.getValor());
     }

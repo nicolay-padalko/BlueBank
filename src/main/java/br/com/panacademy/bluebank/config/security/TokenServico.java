@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Service
@@ -48,5 +49,14 @@ public class TokenServico {
         Claims claimsBody = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
         return Long.parseLong(claimsBody.getSubject());
 
+    }
+
+    public String recuperarToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if(token == null || !token.startsWith("Bearer ")){
+            return null;
+        }
+
+        return token.substring(7);
     }
 }

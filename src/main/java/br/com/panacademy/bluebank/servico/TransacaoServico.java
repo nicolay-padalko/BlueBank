@@ -1,9 +1,6 @@
 package br.com.panacademy.bluebank.servico;
 
-import br.com.panacademy.bluebank.dto.transacao.DepositarDTO;
-import br.com.panacademy.bluebank.dto.transacao.OperacaoDTO;
-import br.com.panacademy.bluebank.dto.transacao.SacarDTO;
-import br.com.panacademy.bluebank.dto.transacao.TransferirDTO;
+import br.com.panacademy.bluebank.dto.transacao.*;
 import br.com.panacademy.bluebank.excecao.SaldoInsuficienteException;
 import br.com.panacademy.bluebank.modelo.usuario.Cliente;
 import br.com.panacademy.bluebank.modelo.Transacao;
@@ -30,9 +27,10 @@ public class TransacaoServico {
     }
 
     @Transactional
-    public DepositarDTO depositar(Long contaId, DepositarDTO depositar) {
+    public DepositarDTO depositar(Long contaId, OperacaoEntradaDTO operacao) {
 
         Cliente cliente = clienteServico.filtrarClientePorContaId(contaId);
+        DepositarDTO depositar = new DepositarDTO(operacao);
         cliente.getConta().setSaldo(retornoSaldoDeposito(cliente, depositar));
 
         List<Cliente> listaCliente = new ArrayList<>();
@@ -42,8 +40,9 @@ public class TransacaoServico {
     }
 
     @Transactional
-    public SacarDTO sacar(Long contaId, SacarDTO sacar){
+    public SacarDTO sacar(Long contaId, OperacaoEntradaDTO operacao){
         Cliente cliente = clienteServico.filtrarClientePorContaId(contaId);
+        SacarDTO sacar = new SacarDTO(operacao);
         cliente.getConta().setSaldo(retornoSaldoSaque(cliente, sacar));
         List<Cliente> listaCliente = new ArrayList<>();
         listaCliente.add(cliente);
@@ -52,19 +51,19 @@ public class TransacaoServico {
 
 
     @Transactional
-    public TransferirDTO transferir(Long idOrigem, Long idDestino, TransferirDTO transferir) {
+    public TransferirDTO transferir(Long idOrigem, Long idDestino, OperacaoEntradaDTO transferir) {
         Cliente clienteOrigem = clienteServico.filtrarClientePorContaId(idOrigem);
 
         Cliente clienteDestino =  clienteServico.filtrarClientePorContaId(idDestino);
 
         List<Cliente> lista = new ArrayList<>();
-
+        TransferirDTO transferirDTO = new TransferirDTO(transferir);
         clienteOrigem.getConta().setSaldo(retornoSaldoSaque(clienteOrigem, new SacarDTO(transferir)));
         clienteDestino.getConta().setSaldo(retornoSaldoDeposito(clienteDestino, new DepositarDTO(transferir)));
         lista.add(clienteOrigem);
         lista.add(clienteDestino);
 
-        return operacao(transferir, lista, TipoTransacao.TRANSFERENCIA);
+        return operacao(transferirDTO, lista, TipoTransacao.TRANSFERENCIA);
     }
 
     private <T extends OperacaoDTO> T operacao(T operacao, List<Cliente> cliente, TipoTransacao tipoTransacao){
@@ -107,14 +106,12 @@ public class TransacaoServico {
     }
 
     public List<Transacao> listarTodos(){
-        List<Transacao> transferir = transacaoRepositorio.findAll();
-        return transferir;
+        return transacaoRepositorio.findAll();
 
     }
 
     public List<Transacao> listarTodosDoUsuario(Long idContaUsuario) {
-        List<Transacao> transferir = transacaoRepositorio.findAllByContaUsuario(idContaUsuario);
-        return transferir;
+        return transacaoRepositorio.findAllByContaUsuario(idContaUsuario);
     }
 
 }

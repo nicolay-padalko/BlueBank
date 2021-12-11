@@ -4,8 +4,6 @@ import br.com.panacademy.bluebank.modelo.Transacao;
 import br.com.panacademy.bluebank.modelo.enuns.TipoTransacao;
 
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public abstract class OperacaoDTO {
@@ -40,6 +38,11 @@ public abstract class OperacaoDTO {
         this.saldo = saldo;
         this.descricao = transacao.getDescricao();
         this.tipoTransacao = transacao.getTipoTransacao();
+    }
+
+    public OperacaoDTO(OperacaoEntradaDTO operacao){
+        this.valor = operacao.getValor();
+        this.descricao = operacao.getDescricao();
     }
 
     public OperacaoDTO(Double valor){
