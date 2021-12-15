@@ -100,6 +100,8 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 - <h4>Extras:</h4>
 - Link do projeto utilizado no AWS Lambda: https://github.com/jmvgcomp/pan-academy/tree/master/modulo-java/s2t2lambdaaws
+- Jira: ![image](https://user-images.githubusercontent.com/45069760/146113835-7d2c90da-7f5b-4a03-af1c-96d65c85e816.png)
+
 
 **Para contribuir:**
 
