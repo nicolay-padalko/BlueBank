@@ -101,8 +101,15 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 * [**acesso ao swagger**](http://pancoders.us-east-2.elasticbeanstalk.com/swagger-ui.html#/) 
 
-* Para efetuar os testes no swagger, o usuário precisa logar no sistema com o perfil de "cliente" ou "funcionário";
-* Clientes terão acesso à operações básicas em sua própria conta, como saque, depósito etc. Funcionários terão acesso irrestrito;
+* Para efetuar os testes no swagger, o usuário precisa logar no sistema com o perfil de "cliente" ou "funcionário":
+1. Em "autenticacao-controle", clicar no endpoint **/auth**;
+2. Na tela que abrir, clicar em "**Try it out**";
+
+3. Substituir os campos "string" pelo e-mail e senha do usuário;
+
+- Para "cliente", utilizar "**cliente1@gmail.com**" no campo email e "**cliente123**" no campo senha;
+- Para "funcionário" utilizar "**funcionario1@gmail.com**" no campo email e "**funcionario123**" no campo senha;
+- Obs: Clientes terão acesso às operações básicas em sua própria conta, como saque, depósito etc. Funcionários terão acesso irrestrito;
 
 
 
