@@ -117,7 +117,7 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 ![Tela de login](loginsenha.jpg)
 
-5. Após clicar em "Execute" será gerado um token dentro de "Responde Body". Copiar esse código:
+5. Após clicar em "Execute" será gerado um token dentro de "Response Body". Copiar esse código:
 
 ![Token](token.jpg)
 
