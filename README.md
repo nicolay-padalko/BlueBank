@@ -117,11 +117,15 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 ![Tela de login](loginsenha.jpg)
 
-5. Após clicar em "Execute" será gerado um token dentro de "Responde Body" um pouco abaixo:
+5. Após clicar em "Execute" será gerado um token dentro de "Responde Body". Copiar esse código:
+
+![Token](token.jpg)
+
+6. Com o token copiado, clicar no botão "Authorize" na parte superior da página: 
 
 
 
-
+7. Na tela que abrir, escrever **Bearer**, espaço e colar o token previamente copiado:
 
 
 
