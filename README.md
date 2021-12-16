@@ -123,11 +123,11 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 6. Com o token copiado, clicar no botão "Authorize" na parte superior da página: 
 
-
+![Authorize](authorize.jpg)
 
 7. Na tela que abrir, escrever **Bearer**, espaço e colar o token previamente copiado:
 
-
+![Usuário logado](logado.jpg)
 
 
 <h3>Extras:</h3>
