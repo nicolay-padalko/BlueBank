@@ -108,13 +108,16 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 ![Tela de autenticação](autenticação.jpg)
 
 3. Substituir os campos "string" pelo e-mail e senha do usuário;
-4. Clicar em "Execute";
-
-![Tela de login](loginsenha.jpg)
 
 - Para "cliente", utilizar "**cliente1@gmail.com**" no campo email e "**cliente123**" no campo senha;
 - Para "funcionário" utilizar "**funcionario1@gmail.com**" no campo email e "**funcionario123**" no campo senha;
 - Obs: Clientes terão acesso às operações básicas em sua própria conta, como saque, depósito etc. Funcionários terão acesso irrestrito;
+
+4. Clicar em "Execute";
+
+![Tela de login](loginsenha.jpg)
+
+
 
 
 
