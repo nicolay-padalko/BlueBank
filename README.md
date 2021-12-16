@@ -129,6 +129,9 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 ![Usuário logado](logado.jpg)
 
+8. A próxima tela já deverá mostrar que nosso usuário está logado no sistema. Basta clicar em "close" e proceder aos testes nos endpoints desejados.  Caso não ocorra a autorização, houve preenchimento errado de algum campo ou o token está expirado.  Refazer os passos de 1 à 7.
+
+![Usuário Autorizado e Logado](autorizadoelogado.jpg)
 
 <h3>Extras:</h3>
 - Link do projeto utilizado no AWS Lambda: https://github.com/jmvgcomp/pan-academy/tree/master/modulo-java/s2t2lambdaaws
