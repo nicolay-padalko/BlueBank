@@ -117,6 +117,10 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 
 ![Tela de login](loginsenha.jpg)
 
+5. Após clicar em "Execute" será gerado um token dentro de "Responde Body" um pouco abaixo:
+
+
+
 
 
 
