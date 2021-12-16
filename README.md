@@ -97,8 +97,17 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 | <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/transferir/{contaIdDestino} | Efetua uma transferência para outro cliente do banco |
 | <a><img src="https://img.shields.io/badge/-POST-brightgreen"></a> | /transacoes/transferir/{contaIdOrigem}/{contaIdDestino} | Transferência entre contas do banco, filtrada pelos ID´s ||
 
+## SWAGGER
 
-- <h4>Extras:</h4>
+* [**acesso ao swagger**](http://pancoders.us-east-2.elasticbeanstalk.com/swagger-ui.html#/) 
+
+* Para efetuar os testes no swagger, o usuário precisa logar no sistema com o perfil de "cliente" ou "funcionário";
+* Clientes terão acesso à operações básicas em sua própria conta, como saque, depósito etc. Funcionários terão acesso irrestrito;
+
+
+
+
+<h3>Extras:</h3>
 - Link do projeto utilizado no AWS Lambda: https://github.com/jmvgcomp/pan-academy/tree/master/modulo-java/s2t2lambdaaws
 - Jira: ![image](https://user-images.githubusercontent.com/45069760/146113835-7d2c90da-7f5b-4a03-af1c-96d65c85e816.png)
 
