@@ -105,6 +105,8 @@ Projeto de apresentação final do PAN Academy, um programa de treinamento do Ba
 1. Em "autenticacao-controle", clicar no endpoint **/auth**;
 2. Na tela que abrir, clicar em "**Try it out**";
 
+![Tela de autenticação](autenticação.jpg)
+
 3. Substituir os campos "string" pelo e-mail e senha do usuário;
 
 - Para "cliente", utilizar "**cliente1@gmail.com**" no campo email e "**cliente123**" no campo senha;
